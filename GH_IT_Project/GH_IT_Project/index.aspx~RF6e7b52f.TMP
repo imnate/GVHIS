@@ -1,0 +1,1080 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="GH_IT_Project.index" %>
+
+<!DOCTYPE html>
+
+<head>
+    <title>岡山榮家資訊系統</title>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>--%>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/mydesign.css" rel="stylesheet" />
+    <link href="css/jquery-confirm.min.css" rel="stylesheet" />
+    <script src="js/jquery-confirm.min.js"></script>
+    <link href="css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="DataTables/DataTables-1.10.16/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+    <script src="DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+    <%--oncontextmenu="return false" 鎖右鍵--%>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header text-center">
+                <h3>岡榮資訊系統</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <p class="text-center">秘書室</p>
+                <li>
+                    <a href="#IT_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">資訊室</a>
+                    <ul class="collapse list-unstyled text-center" id="IT_Submenu">
+                        <li><a data-toggle="modal" data-target="#IT_Modal" href="#">資訊設備報修</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#IT_DataTable_Modal" id="IT_search">維修進度查詢</a></li>
+                        <li><a href="#">資訊設備預約</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#plumber_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">水電班</a>
+                    <ul class="collapse list-unstyled text-center" id="plumber_Submenu">
+                        <li><a data-toggle="modal" data-target="#plumber_Modal" href="#">派修單填寫</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#Pulmber_DataTable_Modal" id="Plumber_search">維修進度查詢</a></li>
+                    </ul>
+                </li>
+                <li id="management"></li>
+                <%--<li>
+                <a href="#">Portfolio</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>--%>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a id="Admin_Login" href="#" class="download" data-toggle="modal" data-target="#Login_page">Admin Login</a></li>
+                <%--<li><a class="article">Back to article</a></li>--%>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>隱藏工具列</span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <button id="Login_btn" class="btn btn-warning" type="button" data-toggle="modal" data-target="#Login_page">Login</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <h2>Collapsible Sidebar Using Bootstrap 3</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+            <h2>Lorem Ipsum Dolor</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+            <h2>Lorem Ipsum Dolor</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+
+    <%-- 以上為側邊攔side bar --%>
+
+
+    <!--資訊室維修單 Modal -->
+    <div class="modal fade" id="IT_Modal" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div style="padding: 35px 50px; background-color: #5bc0de;">
+                    <button type="button" id="IT_Modal_cancel" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="background-color: #5bc0de;"><span class="fas fa-cube"></span>資訊設備報修單</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="dropdown">
+                                <label for="label_repairs" class="col-lg-2">申請單位:</label>
+                                <div class="col-lg-12">
+                                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton_group" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        請點擊我選擇單位<span class="caret"></span>
+                                    </button>
+                                    <ul id="group_list" class="dropdown-menu">
+                                        <li><a href="#">秘書室</a></li>
+                                        <li><a href="#">保健組</a></li>
+                                        <li><a href="#">輔導室</a></li>
+                                        <li><a href="#">育樂堂(一隊)</a></li>
+                                        <li><a href="#">育豐堂(二隊)</a></li>
+                                        <li><a href="#">育興堂(三隊)</a></li>
+                                        <li><a href="#">育善堂(四隊)</a></li>
+                                        <li><a href="#">育愛堂(五隊)</a></li>
+                                        <li><a href="#">育智堂(六隊)</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="dropdown">
+                                <label for="label_repairs" class="col-lg-2">報修項目:</label>
+                                <div class="col-lg-12">
+                                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton_item" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        請點擊我選擇項目<span class="caret"></span>
+                                    </button>
+                                    <ul id="device_items" class="dropdown-menu">
+                                        <li><a href="#">電腦主機</a></li>
+                                        <li><a href="#">電腦螢幕</a></li>
+                                        <li><a href="#">滑鼠</a></li>
+                                        <li><a href="#">鍵盤</a></li>
+                                        <li><a href="#">讀卡機</a></li>
+                                        <li><a href="#">印表機</a></li>
+                                        <li><a href="#">網路</a></li>
+                                        <li><a href="#">公文系統</a></li>
+                                        <li><a href="#">安養系統</a></li>
+                                        <li><a href="#">行政網</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="label_repairs" class="col-sm-2">報修人:</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="IT_reporter" placeholder="*必填 請輸入中文姓名 (勿輸入數字或符號)">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="label_phone" class="col-sm-2">分機:</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="IT_phone" placeholder="*必填 請輸入分機號碼 (格式如:316)">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="form-control-label col-sm-2">說明:</label>
+                                <div class="col-sm-12">
+                                    <textarea runat="server" class="form-control" id="IT_text" placeholder="故障簡述"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4  text-center">
+                        <button type="submit" id="IT_submit" class="btn btn-info">送出</button>
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var count_ajax = 0;
+        $(document).ready(function () {
+            var ss = $('#IT_DataTable_filter input').val();
+            table = $('#IT_DataTable').DataTable({
+                "serverSide": true,
+                "searching": true,
+                //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "ajax": {
+                    "url": "IT_table_viewer.asmx/IT_table",
+                    "type": "GET",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.search = $('#IT_DataTable_filter input').val();
+                    },
+                    "dataSrc": function (json) {
+                        json.draw = json.data.draw;
+                        json.recordsTotal = json.data.iTotalRecords;
+                        json.recordsFiltered = json.data.iTotalDisplayRecords;
+
+                        return json.data;
+                    }
+
+                },
+
+                "oLanguage": {
+                    "sProcessing": "處理中...",
+                    "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                    "sZeroRecords": "無符合資料",
+                    "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
+                    "sInfoEmpty": "無任何資料",
+                    "sInfoFiltered": "(過濾總筆數 _MAX_)",
+                    "sInfoPostFix": "",
+                    "sSearch": "過濾",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "首頁",
+                        "sPrevious": "上頁",
+                        "sNext": "下頁",
+                        "sLast": "末頁"
+                    }
+                },
+                "columns": [
+                    { "data": "unit", "name": "unit", "autoWidth": true },
+                    { "data": "report_item", "name": "report_item", "autoWidth": true },
+                    { "data": "reporter", "name": "reporter", "autoWidth": true },
+                    { "data": "remark", "name": "remark", "autoWidth": true },
+                    { "data": "date", "name": "date", "autoWidth": true, "orderable": true },
+                    { "data": "status", "name": "status", "autoWidth": true },
+                ],
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" }
+                ],
+            });
+        });
+    </script>
+
+
+    <div id="IT_DataTable_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div style="padding: 35px 50px; background-color: #5bc0de;">
+                    <button type="button" id="IT_DataTable_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="background-color: #5bc0de;"><span class="glyphicon glyphicon-copy"></span>資訊室維修進度查詢</h4>
+                </div>
+                <div class="modal-body scrollable-plumer">
+                    <table id="IT_DataTable" class="display" style="width: 100%">
+
+                        <thead>
+                            <tr style="text-align: left;">
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="text-align: left;">
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Pulmber_DataTable_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div style="padding: 35px 50px; background-color: #337ab7;">
+                    <button type="button" id="Pulmber_DataTable_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="background-color: #337ab7;"><span class="glyphicon glyphicon-copy"></span>水電班維修進度查詢</h4>
+                </div>
+                <div class="modal-body scrollable-plumer">
+                    <table id="Pulmber_DataTable" class="display" style="width: 100%">
+
+                        <thead>
+                            <tr style="text-align: left;">
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>地點</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="text-align: left;">
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>地點</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var count_ajax = 0;
+        $(document).ready(function () {
+            table = $('#Pulmber_DataTable').DataTable({
+                "serverSide": true, //serverSide打開
+                "searching": true,
+                //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "ajax": {
+                    "url": "Plumber_table_viewer.asmx/Plumber_table",
+                    "type": "GET",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.search = $('#Pulmber_DataTable_filter input').val();
+                    },
+                    "dataSrc": function (json) {
+                        json.draw = json.data.draw;
+                        json.recordsTotal = json.data.iTotalRecords;
+                        json.recordsFiltered = json.data.iTotalDisplayRecords;
+                        return json.data;
+                    }
+
+                },
+
+                "oLanguage": {
+                    "sProcessing": "處理中...",
+                    "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                    "sZeroRecords": "無符合資料",
+                    "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
+                    "sInfoEmpty": "無任何資料",
+                    "sInfoFiltered": "(過濾總筆數 _MAX_)",
+                    "sInfoPostFix": "",
+                    "sSearch": "過濾",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "首頁",
+                        "sPrevious": "上頁",
+                        "sNext": "下頁",
+                        "sLast": "末頁"
+                    }
+                },
+                "columns": [
+                    { "data": "Unit", "name": "Unit", "autoWidth": true },
+                    { "data": "fix_item", "name": "fix_item", "autoWidth": true },
+                    { "data": "reporter", "name": "reporter", "autoWidth": true },
+                    { "data": "location", "name": "location", "autoWidth": true },
+                    { "data": "remark", "name": "remark", "autoWidth": true },
+                    { "data": "time", "name": "time", "autoWidth": true, "orderable": true },
+                    { "data": "status", "name": "status", "autoWidth": true },
+                ],
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" }
+                ],
+            });
+        });
+    </script>
+    <script>
+         var IT_info = "";
+         $(document).on('click', '#IT_submit', function () {
+             if (check()) {
+                 //表格有資料
+                 console.log("(" + $('#IT_reporter').val() + ")" + "(" + $('#IT_reporter').text() + ")" + Regex_check($('#IT_reporter').val(), /^[\u4e00-\u9fa5]{2,9}$/));
+                 $.ajax({
+                     url: "IT_Table.asmx/IT_table_insert",
+                     method: "post",
+                     dataType: "json",
+                     data: {
+                         unit: $("#dropdownMenuButton_group").text(),
+                         report_item: $("#dropdownMenuButton_item").text(),
+                         reporter: $('#IT_reporter').val(),
+                         phone: $('#IT_phone').val(),
+                         remark: $('#IT_text').val(),
+                     },
+                     success: function (data) {
+                         $.confirm({
+                             icon: 'far fa-check-circle',
+                             title: '成功',
+                             content: '報修成功' + data,
+                             type: 'green',
+                             typeAnimated: true,
+                             buttons: {
+                                 close: {
+                                     text: '確定',
+                                     btnClass: 'btn-green',
+                                     action: function () {
+                                         $('#IT_Modal').modal('hide');
+                                         initial_IT_Modal();
+                                         table.draw();
+                                     }
+                                 },
+                             }
+                         });
+
+
+                     },
+                     error: function (err) { console.log(err) },
+
+                 });
+             }
+             else {
+                 //表格無資料
+                 fail_check();
+                 $.confirm({
+                     icon: 'fas fa-minus-circle',
+                     title: '錯誤',
+                     content: IT_info,
+                     type: 'red',
+                     typeAnimated: true,
+                     buttons: {
+                         tryAgain: {
+                             text: '返回',
+                             btnClass: 'btn-red',
+                             action: function () {
+                             }
+                         },
+                     }
+                 });
+             }
+
+         });
+    </script>
+    <script>
+
+</script>
+    <script>
+         $(document).on('click', '#IT_Modal_cancel', function () {//IT_Modal取消回復初始化
+             initial_IT_Modal();
+         });
+
+         $(document).on('click', '#plumber_group_list a', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_group_plumber").text($(this).text());
+         });
+         $(document).on('click', '#plumber_device_items1 li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item_plumber1").text($(this).text());
+         });
+         $(document).on('click', '#plumber_device_items2 li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item_plumber2").text($(this).text());
+         });
+
+         $(document).on('click', '#plumber_device_items3 li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item_plumber3").text($(this).text());
+         });
+
+         $(document).on('click', '#plumber_device_items4 li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item_plumber4").text($(this).text());
+         });
+
+         $(document).on('click', '#plumber_device_items5 li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item_plumber5").text($(this).text());
+         });
+         $(document).on('click', '#device_items li', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_item").text($(this).text());
+         });
+         $(document).on('click', '#group_list a', function () {
+             console.log("抓資料 : " + $(this).text());
+             $("#dropdownMenuButton_group").text($(this).text());
+         });
+    </script>
+    <style>
+        .modal-header-login, h4, .close {
+            background-color: #5cb85c;
+            color: white !important;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+    </style>
+
+    <div class="container">
+        <!--Login Modal -->
+        <div class="modal fade" id="Login_page" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+            <div class="modal-dialog">
+                <!--Login Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header-login" style="padding: 35px 50px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-lock"></span>Login</h4>
+                    </div>
+                    <div class="modal-body" style="padding: 40px 50px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="account"><span class="glyphicon glyphicon-user"></span>Account</label>
+                                <input type="text" class="form-control" id="Loign_Account" placeholder="Enter Account">
+                            </div>
+                            <div class="form-group">
+                                <label for="psw"><span class="glyphicon glyphicon-eye-open"></span>Password</label>
+                                <input type="Password" class="form-control" id="Login_psw" placeholder="Enter password">
+                            </div>
+                            <button type="button" id="Login_submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span>Login</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+                        <p><a href="#">非系統管理指勿嘗試登入</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function check() {//檢測規則
+            if ($("#dropdownMenuButton_group").text().indexOf("請點擊我選擇單位") == -1
+                && $("#dropdownMenuButton_item").text().indexOf("請點擊我選擇項目") == -1
+                && Regex_check($('#IT_reporter').val(), /^[\u4e00-\u9fa5]{2,9}$/) == true
+                && Regex_check($('#IT_phone').val(), /^[0-9]{3}$/) == true) { return true; }
+            else
+                return false;
+        }
+        function fail_check() {
+            IT_info = "";
+            if ($("#dropdownMenuButton_group").text().indexOf("請點擊我選擇單位") != -1)
+                IT_info += "[請檢查] 申請單位<br/>";
+            if ($("#dropdownMenuButton_item").text().indexOf("請點擊我選擇項目") != -1)
+                IT_info += "[請檢查] 報修項目<br/>";
+            if (Regex_check($('#IT_reporter').val(), /^[\u4e00-\u9fa5]{2,9}$/) != true)
+                IT_info += "[請檢查] 報修人 (只能輸入中文)<br/>";
+            if (Regex_check($('#IT_phone').val(), /^[0-9]{3}$/) != true)
+                IT_info += "[請檢查] 分機 (只能輸入數字)<br/>"
+
+        }
+        function Regex_check(date, rex) {//正規表達式規則
+            var regex = new RegExp(rex);
+            return regex.test(date);
+        }
+        function initial_IT_Modal() {
+            $("#dropdownMenuButton_group").text("請點擊我選擇單位").append('<span class="caret"></span>');
+            $("#dropdownMenuButton_item").text("請點擊我選擇項目").append('<span class="caret"></span>');
+            $("#IT_reporter").val("");
+            $("#IT_phone").val("");
+            $("#IT_text").val("");
+        }
+
+        function initial_plumber_Modal() {
+            $("#dropdownMenuButton_group_plumber").text("請選擇單位").append('<span class="caret"></span>');
+            $("#plumber_reporter").val("");
+            $("#plumber_reporter_phone").val("");
+
+            $("#dropdownMenuButton_item_plumber1").text("請選擇項目").append('<span class="caret"></span>');
+            $("#plumber_local1").val("");
+            $("#remark1").val("");
+
+            for (var i = 2; i <= count; i++) {
+                $("#card_" + i).remove();
+            }
+
+            count = 1;
+
+            $(del_item).attr('disabled', true);
+            $(new_item).attr('disabled', false);
+
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Login_submit').on('click', function () {
+                $.ajax({
+                    url: "Login_ajax.asmx/Login_admin",
+                    method: "post",
+                    dataType: "json",
+                    data: { account: $('#Loign_Account').val(), psw: $('#Login_psw').val() },
+                    success: function (data) {
+                        switch (data[0].authority) {
+                            case "s":
+                                $(Admin_Login).removeAttr('href data-target');
+                                $(Admin_Login).text('SuperAdmin');
+                                $(Login_btn).attr('disabled', true);
+                                $(Login_btn).text('SuperAdmin');
+                                console.log("權限: " + data[0].authority);
+                                $('#Login_page').modal('hide');
+                                $(management).append(
+                                    '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
+                                    '<ul class="collapse list-unstyled text-center" id="management_Submenu">' +
+                                    '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#">水電班管理</a></li>' +
+                                    '<li><a data-toggle="modal" data-target="#IT_DataTable_management_Modal" id ="IT_management" href="#">資訊室管理</a></li>' +
+                                    '</ul>'
+                                );
+                                break;
+                            case "0":
+                                $(Admin_Login).removeAttr('href data-target');
+                                $(Admin_Login).text('ZeroAdmin');
+                                $(Login_btn).attr('disabled', true);
+                                $(Login_btn).text('ZeroAdmin');
+                                console.log("權限: " + data[0].authority);
+                                $('#Login_page').modal('hide');
+                                break;
+                            case "1":
+                                $(Admin_Login).removeAttr('href data-target');
+                                $(Admin_Login).text('OneAdmin');
+                                $(Login_btn).attr('disabled', true);
+                                $(Login_btn).text('OneAdmin');
+                                console.log("權限: " + data[0].authority);
+                                $('#Login_page').modal('hide');
+                                break;
+                            case "2":
+                                $(Admin_Login).removeAttr('href data-target');
+                                $(Admin_Login).text('TwoAdmin');
+                                $(Login_btn).attr('disabled', true);
+                                $(Login_btn).text('TwoAdmin');
+                                console.log("權限: " + data[0].authority);
+                                $('#Login_page').modal('hide');
+                                break;
+
+                        }
+                    },
+                    error: function (err) { },
+
+                });
+
+            });
+        });
+    </script>
+    <!-- 派工單填寫 plumber_Modal-->
+    <div id="plumber_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div style="padding: 35px 50px; background-color: #337ab7;">
+                    <button type="button" id="plumber_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="background-color: #337ab7;"><span class="glyphicon glyphicon-copy"></span>工作班預約派工單</h4>
+                </div>
+                <div class="modal-body scrollable-plumer">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="dropdown">
+                                <label for="label_repairs" class="col-md-12">申請單位:</label>
+                                <div class="col-md-12">
+                                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton_group_plumber" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        請選擇單位
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="plumber_group_list" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a id="plumber_1">秘書室</a></li>
+                                        <li><a id="plumber_2">保健組</a></li>
+                                        <li><a id="plumber_3">輔導室</a></li>
+                                        <li><a id="plumber_4">育樂堂(一隊)</a></li>
+                                        <li><a id="plumber_5">育豐堂(二隊)</a></li>
+                                        <li><a id="plumber_6">育興堂(三隊)</a></li>
+                                        <li><a id="plumber_7">育善堂(四隊)</a></li>
+                                        <li><a id="plumber_8">育愛堂(五隊)</a></li>
+                                        <li><a id="plumber_9">育智堂(六隊)</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="label_repairs">報修人:</label>
+                            <input type="text" class="form-control" id="plumber_reporter" placeholder="請輸入姓名 *必填">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="label_repairs">報修人分機:</label>
+                            <input type="text" class="form-control" id="plumber_reporter_phone" placeholder="請輸入分機 *必填">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <button id="new_item" type="button" class="btn btn-warning">新增項目</button>
+                            <button id="del_item" type="button" class="btn btn-danger" disabled="true">刪除項目</button>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" id="item_card">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading text-center">維修項目1</div>
+                                <div class="panel-body">
+                                    <div class="col-md-2">
+                                        <label for="label_repairs">報修項目:</label>
+                                        <div class="dropdown ">
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton_item_plumber1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                請選擇項目 <span class="caret"></span>
+                                            </button>
+                                            <ul id="plumber_device_items1" class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuButton_item">
+                                                <span class="dropdown-header" style="background-color: rgb(220,220,220);">傢俱類</span>
+                                                <li><a href="#">衣櫃</a></li>
+                                                <li><a href="#">書桌</a></li>
+                                                <li><a href="#">椅子</a></li>
+                                                <li><a href="#">門</a></li>
+                                                <li><a href="#">門鎖</a></li>
+                                                <li><a href="#">床</a></li>
+                                                <li><a href="#">窗戶</a></li>
+                                                <span class="dropdown-header" style="background-color: rgb(220,220,220);">淋浴/廁所類</span>
+                                                <li><a href="#">熱水</a></li>
+                                                <li><a href="#">馬桶</a></li>
+                                                <li><a href="#">水龍頭</a></li>
+                                                <li><a href="#">蓮蓬頭</a></li>
+                                                <span class="dropdown-header" style="background-color: rgb(220,220,220);">電器類</span>
+                                                <li><a href="#">電燈</a></li>
+                                                <li><a href="#">冷氣</a></li>
+                                                <span class="dropdown-header" style="background-color: rgb(220,220,220);">公設類</span>
+                                                <li><a href="#">監視器</a></li>
+                                                <li><a href="#">電梯</a></li>
+                                                <li><a href="#">呼叫鈴</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="label_number">報修地點或房號:</label>
+                                        <input type="text" class="form-control col-sm-9" id="plumber_local1" placeholder="請輸入地點或房號 *必填">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="message-text" class="form-control-label">說明:</label>
+                                        <textarea class="form-control" placeholder="故障簡述" id="remark1"></textarea>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4 container text-center">
+                            <button type="submit" id="plumer_submit" class="btn btn-primary">送出</button>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-- 新增刪除JQ --%>
+    <script>
+        var count = 1;
+        var plumer_info = "";
+        $(new_item).click(function () {
+            count++;
+            var new_item_str = '<div class="col-md-12" id="card_' + count + '">' +
+                '<div class="panel panel-primary ">' +
+                '<div class="panel-heading text-center">維修項目' + count + '</div>' +
+                '<div class="panel-body">' +
+                '<div class="col-md-2">' +
+                '<label for="label_repairs">報修項目:</label>' +
+                '<div class="dropdown ">' +
+                '<button class="btn btn-success dropdown-toggle" ' + 'type="button" id="dropdownMenuButton_item_plumber' + count + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
+                '請選擇項目 <span class="caret"></span>' +
+                '</button>' +
+                '<ul id="plumber_device_items' + count + '" class="dropdown-menu ' + 'scrollable-menu" aria-labelledby="dropdownMenuButton_item">' +
+                '<span class="dropdown-header" style="background-color: rgb(220,220,220);">' +
+                '傢俱類' +
+                '</span>' +
+                '<li><a href="#">衣櫃</a></li>' +
+                '<li><a href="#">書桌</a></li>' +
+                '<li><a href="#">椅子</a></li>' +
+                '<li><a href="#">門</a></li>' +
+                '<li><a href="#">門鎖</a></li>' +
+                '<li><a href="#">床</a></li>' +
+                '<li><a href="#">窗戶</a></li>' +
+                '<span class="dropdown-header" style="background-color: rgb(220,220,220);">' +
+                '淋浴/廁所類' +
+                '</span>' +
+                '<li><a href="#">熱水</a></li>' +
+                '<li><a href="#">馬桶</a></li>' +
+                '<li><a href="#">水龍頭</a></li>' +
+                '<li><a href="#">蓮蓬頭</a></li>' +
+                '<span class="dropdown-header" style="background-color: rgb(220,220,220);">' +
+                '電器類' +
+                '</span>' +
+                '<li><a href="#">電燈</a></li>' +
+                '<li><a href="#">冷氣</a></li>' +
+                '<span class="dropdown-header" style="background-color: rgb(220,220,220);">' +
+                '公設類' +
+                '</span>' +
+                '<li><a href="#">監視器</a></li>' +
+                '<li><a href="#">電梯</a></li>' +
+                '<li><a href="#">呼叫鈴</a></li>' +
+                '</ul>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-4">' +
+                '<label for="label_number">報修地點或房號:</label>' +
+                '<input type="text" class="form-control col-sm-9" id="plumber_local' + count + '" placeholder="請輸入地點或房號 *必填">' +
+                '</div>' +
+                '<div class="col-md-6">' +
+                '<label for="message-text" class="form-control-label">說明:</label>' +
+                '<textarea class="form-control" placeholder="故障簡述" id="remark' + count + '"></textarea>' +
+                '<br>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+
+            $(item_card).append(new_item_str);
+            if (count == 5) {
+                $(del_item).attr('disabled', false);
+                $(new_item).attr('disabled', true);
+            }
+            if (count == 2) {
+                $(del_item).attr('disabled', false);
+            }
+
+        });
+        $(del_item).click(function () {
+            if (count > 1) {
+                var id_div = "#card_" + count;
+                console.log("del: " + count + " empty: " + id_div);
+                $(del_item).attr('disabled', false);
+                $(id_div).remove();
+                count--;
+                if (count == 1) {
+                    $(del_item).attr('disabled', true);
+                    $(new_item).attr('disabled', false);
+                }
+            }
+
+            if (count < 5 && count > 1) {
+                $(new_item).attr('disabled', false);
+
+            }
+        });
+        $(document).on('click', '#plumber_Modal_cannel', function () {//plumber_Modal取消回復初始化
+            initial_plumber_Modal();
+        });
+        $(document).on('click', '#plumer_submit', function () {
+            plumer_info = ""
+
+            if (plumer_check() == true) {
+                var count_success = 0;
+                for (var i = 1; i <= count; i++) {
+                    $.ajax({
+                        url: "Plumber_Table.asmx/Plumber_Table_insert",
+                        method: "post",
+                        dataType: "json",
+                        data: {
+                            dmpgp: $("#dropdownMenuButton_group_plumber").text(),
+                            plumber_reporter: $('#plumber_reporter').val(),
+                            plumber_reporter_phone: $('#plumber_reporter_phone').val(),
+                            dmpip: $("#dropdownMenuButton_item_plumber" + i).text(),
+                            plumber_local: $("#plumber_local" + i).val(),
+                            remark: $("#remark" + i).val()
+                        },
+                        success: function (data) {
+                            count_success++;
+                            if (count_success == count) {
+                                $.confirm({
+                                    icon: 'far fa-check-circle',
+                                    title: '成功',
+                                    content: '報修成功' + data,
+                                    type: 'green',
+                                    typeAnimated: true,
+                                    buttons: {
+                                        close: {
+                                            text: '確定',
+                                            btnClass: 'btn-green',
+                                            action: function () {
+                                                $('#plumber_Modal').modal('hide');
+                                                initial_plumber_Modal();
+                                            }
+                                        },
+                                    }
+                                });
+                            }
+                        },
+                        error: function (data) {
+                            if (count_success == count) {
+                                $.confirm({
+                                    title: '報修失敗',
+                                    content: '請再重新報修或是通知資訊室' + data,
+                                    type: 'red',
+                                    typeAnimated: true,
+                                    buttons: {
+                                        tryAgain: {
+                                            text: '返回首頁',
+                                            btnClass: 'btn-red',
+                                            action: function () {
+                                                $('#plumber_Modal').modal('hide');
+                                                initial_plumber_Modal();
+                                            }
+                                        },
+                                    }
+                                });
+                            }
+                        },
+
+                    });
+                }
+
+            }
+            else {
+                $.confirm({
+                    icon: 'fas fa-minus-circle',
+                    title: '表格錯誤或空白',
+                    content: plumer_info,
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: '返回',
+                            btnClass: 'btn-red',
+                            action: function () {
+                            }
+                        },
+                    }
+                });
+            }
+
+
+        });
+        function plumer_check() {
+
+            if ($("#dropdownMenuButton_group_plumber").text().indexOf("請選擇單位") != -1) {
+                plumer_info += "申請單位<br/>";
+            }
+            if (Regex_check($('#plumber_reporter').val(), /^[\u4e00-\u9fa5]{2,9}$/) != true) {
+                plumer_info += "報修人<br/>";
+            }
+            if (Regex_check($('#plumber_reporter_phone').val(), /^[0-9]{3}$/) != true) {
+                plumer_info += "報修人分機<br/>";
+            }
+            for (var i = 1; i <= count; i++) {
+                if (i >= 2) {
+                    if ($("#dropdownMenuButton_item_plumber" + i).text().indexOf("請選擇項目") != -1) {
+                        plumer_info += "※不使用的項目請刪除<br/>";
+                        plumer_info += "[維修項目" + i + "] 報修項目<br/>";
+                    }
+                    if ($("#plumber_local" + i).val().replace(" ", "") == "") {
+                        plumer_info += "[維修項目" + i + "] 報修地點或房號<br/>";
+                    }
+                }
+                else {
+                    if ($("#dropdownMenuButton_item_plumber" + i).text().indexOf("請選擇項目") != -1) {
+                        plumer_info += "[維修項目" + i + "] 報修項目<br/>";
+                    }
+                    if ($("#plumber_local" + i).val().replace(" ", "") == "") {
+                        plumer_info += "[維修項目" + i + "] 報修地點或房號<br/>";
+                    }
+                }
+            }
+            if (plumer_info.length > 0) {
+                return false;
+            }
+            else { return true; }
+
+        }
+    </script>
+
+    <div id="Pulmber_management_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div style="padding: 35px 50px; background-color: #337ab7;">
+                    <button type="button" id="Pulmber_management_DataTable_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="background-color: #337ab7;"><span class="glyphicon glyphicon-copy"></span>水電班維修進度查詢</h4>
+                </div>
+                <div class="modal-body scrollable-plumer">
+                    <table id="Pulmber_management_DataTable" class="display" style="width: 100%">
+
+                        <thead>
+                            <tr style="text-align: left;">
+                                <th>ID<th>
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>地點</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="text-align: left;">
+                                 <th>ID<th>
+                                <th>單位</th>
+                                <th>報修人</th>
+                                <th>報修項目</th>
+                                <th>地點</th>
+                                <th>備註</th>
+                                <th>報修時間</th>
+                                <th>受理狀態</th>
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var count_ajax = 0;
+        $(document).ready(function () {
+            table = $('#Pulmber_management_DataTable').DataTable({
+                "serverSide": true, //serverSide打開
+                "searching": true,
+                //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "ajax": {
+                    "url": "Plumber_table_viewer.asmx/Plumber_table",
+                    "type": "GET",
+                    "datatype": "json",
+                    "data": function (d) {
+                        d.search = $('#Pulmber_management_DataTable_filter input').val();
+                    },
+                    "dataSrc": function (json) {
+                        json.draw = json.data.draw;
+                        json.recordsTotal = json.data.iTotalRecords;
+                        json.recordsFiltered = json.data.iTotalDisplayRecords;
+                        return json.data;
+                    }
+
+                },
+                "oLanguage": {
+                    "sProcessing": "處理中...",
+                    "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                    "sZeroRecords": "無符合資料",
+                    "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
+                    "sInfoEmpty": "無任何資料",
+                    "sInfoFiltered": "(過濾總筆數 _MAX_)",
+                    "sInfoPostFix": "",
+                    "sSearch": "過濾",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "首頁",
+                        "sPrevious": "上頁",
+                        "sNext": "下頁",
+                        "sLast": "末頁"
+                    }
+                },
+                "columns": [
+                    { "data": "data.id.Increment", "name": "id", "autoWidth": true },
+                    { "data": "Unit", "name": "Unit", "autoWidth": true },
+                    { "data": "fix_item", "name": "fix_item", "autoWidth": true },
+                    { "data": "reporter", "name": "reporter", "autoWidth": true },
+                    { "data": "location", "name": "location", "autoWidth": true },
+                    { "data": "remark", "name": "remark", "autoWidth": true },
+                    { "data": "time", "name": "time", "autoWidth": true, },
+                    { "data": "status", "name": "status", "autoWidth": true },
+                   
+                ],
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" }
+                ],
+            });
+        });
+    </script>
+</body>

@@ -234,9 +234,9 @@ namespace GH_IT_Project
                 .Where(x => x.Increment.Equals(Convert.ToInt32(ID)))
                 .ToList();
             string filter = "{'_id':ObjectId(" + '"' + list[0].id.ToString() + '"' + ")}";
-            string update_para = "{$set:{'Acceptance':'已確認'}}";
-            collection_out.UpdateOne(filter, update_para);
-
+            //string update_para = "{$set:{'Acceptance':'已確認'}}";
+            //collection_out.UpdateOne(filter, update_para);
+            collection_out.DeleteOne(filter);
             Context.Response.Write(js.Serialize("asmx ID" + ID + "確認成功!"));
         }
         [WebMethod]

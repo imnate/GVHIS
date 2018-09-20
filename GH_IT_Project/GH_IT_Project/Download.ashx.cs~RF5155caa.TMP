@@ -23,7 +23,6 @@ namespace GH_IT_Project
 
         public void ProcessRequest(HttpContext context)
         {
-            CloseWINWORD_Porcesses();
             DeleteDOC(context, @"C:\Generate_Temp\");
             //接參數的index
             string Filename = "派工單" + DateTime.Now.ToString("yyyy-MM-dd(HH點mm分)") + ".doc";
@@ -108,6 +107,8 @@ namespace GH_IT_Project
         }
         private string CreateWord(List<List<plumber_table>> Sorting_Data, List<CountNUnit> Count_Number, String SavePath)
         {
+            CloseWINWORD_Porcesses();
+            
             int be = 0;
             int end = 0;
 

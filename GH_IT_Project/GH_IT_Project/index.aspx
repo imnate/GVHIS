@@ -1654,589 +1654,362 @@
         </div>
     </div>
     <script>
-             var IT_Am;
-             var IT_announcement_board;
-             var MegBoard;
-             $(document).ready(function () {
-                 MegBoard = $('#MessageBoard_table').DataTable({
-                     "serverSide": true,
-                     "searching": false,
-                     "lengthChange": false,
-                     "bPaginate": true,
-                     "responsive": true,
-                     "pageLength": 5,
-                     "fixedColumns": {
-                         leftColumns: 2
-                     },
-                     //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                     "ajax": {
-                         "url": "MsgBoard.asmx/get_Message",
-                         "type": "GET",
-                         "datatype": "json",
-                         "dataSrc": function (json) {
-                             json.draw = json.data.draw;
-                             json.recordsTotal = json.data.iTotalRecords;
-                             json.recordsFiltered = json.data.iTotalDisplayRecords;
-
-                             return json.data;
-                         },
-                     },
-
-                     "oLanguage": {
-                         "sProcessing": "處理中...",
-                         "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                         "sZeroRecords": "無任何留言",
-                         "sInfo": "留言總筆數：_TOTAL_",
-                         "sInfoEmpty": "無任何留言",
-                         "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                         "sInfoPostFix": "",
-                         "sSearch": "搜尋",
-                         "sUrl": "",
-                         "oPaginate": {
-                             "sFirst": "首頁",
-                             "sPrevious": "上頁",
-                             "sNext": "下頁",
-                             "sLast": "末頁"
-                         }
-                     },
-                     "columns": [
-                         {
-                             "data": "commenter", "name": "commenter",
-                             "render": function (data) {
-                                 return '<div  class="text-center" >' + data + '</div>';
-                             }
-                         },
-                         {
-                             "data": "insert_date", "name": "insert_date",
-                             "render": function (data) {
-                                 return '<div  class="text-center" >' + data + '</div>';
-                             }
-                         },
-                         {
-                             "data": "feedback", "name": "feedback",
-                             "render": function (data) {
-                                 if (data.length != 0)
-                                     return '<i  class="fas fa-check"></i>';
-                                 else
-                                     return '<i  class="fas fa-times"></i>';
-                             }
-                         },
-                         {
-                             "data": "strId", "name": "strId",
-                             "render": function (data) {
-                                 return '<a href="#" class="text-center" onclick="show_MessageDetail(\'' + data + '\')"><i class="fas fa-search">查看詳情</i></a>';
-                             }
-                         },
-                     ],
-                     "columnDefs": [
-                         {
-                             "className": "dt-center", "targets": "_all",
-                         }],
-                 });
-             });
-             function show_MessageDetail(ID) {
-                 $.ajax({
-                     url: "MsgBoard.asmx/Msg_SearchByID",
-                     method: "post",
-                     dataType: "json",
-                     data: {
-                         ID: ID,
-                     },
-                     success: function (data) {
-                         var Message_result;
-                         if (data[0].feedback != 0)
-                             Message_result = data[0].message + "\r\n\r\n" + "[回覆]\r\n" + data[0].feedback;
-                         else
-                             Message_result = data[0].message;
-                         $.confirm({
-                             icon: 'far fa-user',
-                             title: '詳情',
-                             content:
-                             '<form action="" class="formName">' +
-                             '<div class="form-group">' +
-                             '<label>留言人:</label>' +
-                             '<input type="text" readonly class="form-control" value="' + data[0].commenter + '">' +
-                             '</div>' +
-                             '<form action="" class="formName">' +
-                             '<div class="form-group">' +
-                             '<label>分機:</label>' +
-                             '<input type="text" readonly class="form-control" value="' + data[0].phone + '">' +
-                             '</div>' +
-                             '<div class="form-group">' +
-                             '<label>留言時間:</label>' +
-                             '<input type="text" readonly class="form-control" value="' + data[0].insert_date + '">' +
-                             '</div>' +
-                             '<div class="form-group">' +
-                             '<label>留言內容:</label>' +
-                             '<textarea rows="5" readonly class="form-control" >' + Message_result + '</textarea>' +
-                             '</div>' +
-                             '</form>',
-
-                             type: 'green',
-                             typeAnimated: true,
-                             buttons: {
-                                 tryAgain: {
-                                     text: '返回',
-                                     btnClass: 'btn-green',
-                                     action: function () {
-                                     }
-                                 },
-                             },
-                             //onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
-                             //    // bind to events
-                             //    var jc = this;
-                             //    this.$content.find('form').on('submit', function (e) {
-                             //        // if the user submits the form by pressing enter in the field.
-                             //        e.preventDefault();
-                             //        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                             //    });
-                             //}
-                         });
-                     },
-                     error: function (err) { }
-
-                 });
-             }
-
-
-             $(document).ready(function () {
-                 IT_announcement_board = $('#IT_announcements').DataTable({
-                     "serverSide": true,
-                     "searching": false,
-                     "lengthChange": false,
-                     "bPaginate": true,
-                     "responsive": true,
-                     "pageLength": 5,
-                     "fixedColumns": {
-                         leftColumns: 2
-                     },
-                     //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                     "ajax": {
-                         "url": "Announcement.asmx/Get_Info",
-                         "type": "GET",
-                         "datatype": "json",
-                         "dataSrc": function (json) {
-                             json.draw = json.data.draw;
-                             json.recordsTotal = json.data.iTotalRecords;
-                             json.recordsFiltered = json.data.iTotalDisplayRecords;
-
-                             return json.data;
-                         },
-                     },
-
-                     "oLanguage": {
-                         "sProcessing": "處理中...",
-                         "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                         "sZeroRecords": "無符合公告",
-                         "sInfo": "公告總筆數：_TOTAL_",
-                         "sInfoEmpty": "無任何公告",
-                         "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                         "sInfoPostFix": "",
-                         "sSearch": "搜尋",
-                         "sUrl": "",
-                         "oPaginate": {
-                             "sFirst": "首頁",
-                             "sPrevious": "上頁",
-                             "sNext": "下頁",
-                             "sLast": "末頁"
-                         }
-                     },
-                     "columns": [
-                         {
-                             "data": "Title", "name": "Title",
-                             "render": function (data) {
-                                 return '<div style="width: 200px">' + data + '</div>';
-                             }
-                         },
-                         {
-                             "data": "Increment", "name": "Increment",
-                             "render": function (data) {
-                                 return '<a  href="#" style="width: 5px" onclick="show_announcement(' + data + ')"><i class="fas fa-search">查看</i></a>';
-                             }
-                         },
-                     ],
-                     "columnDefs": [
-                         {
-                             "targets": 1,
-                             "className": "text-center",
-                         }],
-                 });
-             });
-
-             function show_announcement(ID) {
-                 $.ajax({
-                     url: "Announcement.asmx/SearchById",
-                     method: "post",
-                     dataType: "json",
-                     data: {
-                         ID: ID,
-                     },
-                     success: function (data) {
-                         $.confirm({
-                             icon: 'far fa-user',
-                             title: '資訊室公告',
-                             content:
-                             '<form action="" class="formName">' +
-                             '<div class="form-group">' +
-                             '<label>事項:</label>' +
-                             '<input type="text" readonly class="edit_Announcement_Title form-control" value="' + data[0].Title + '">' +
-                             '</div>' +
-                             '<div class="form-group">' +
-                             '<label>詳情:</label>' +
-                             '<textarea rows="7" readonly class="edit_Announcement_Info form-control" >' + data[0].Info + '</textarea>' +
-                             '</div>' +
-                             '</form>',
-
-                             type: 'green',
-                             typeAnimated: true,
-                             buttons: {
-                                 tryAgain: {
-                                     text: '返回',
-                                     btnClass: 'btn-green',
-                                     action: function () {
-                                     }
-                                 },
-                             },
-                             //onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
-                             //    // bind to events
-                             //    var jc = this;
-                             //    this.$content.find('form').on('submit', function (e) {
-                             //        // if the user submits the form by pressing enter in the field.
-                             //        e.preventDefault();
-                             //        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                             //    });
-                             //}
-                         });
-                     },
-                     error: function (err) { }
-
-                 });
-             }
-             function Load_ITAnnounce_ManageDatatable() {
-                 $(document).ready(function () {
-                     IT_Am = $('#IT_Announcement_management_DataTable').DataTable({
-                         "serverSide": true,
-                         "searching": false,
-                         "lengthChange": false,
-                         "bPaginate": true,
-                         "responsive": true,
-                         "pageLength": 5,
-                         //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                         "ajax": {
-                             "url": "Announcement.asmx/Get_Info",
-                             "type": "GET",
-                             "datatype": "json",
-                             "dataSrc": function (json) {
-                                 json.draw = json.data.draw;
-                                 json.recordsTotal = json.data.iTotalRecords;
-                                 json.recordsFiltered = json.data.iTotalDisplayRecords;
-
-                                 return json.data;
-                             },
-                         },
-
-                         "oLanguage": {
-                             "sProcessing": "處理中...",
-                             "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                             "sZeroRecords": "無符合公告",
-                             "sInfo": "公告總筆數：_TOTAL_",
-                             "sInfoEmpty": "無任何公告",
-                             "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                             "sInfoPostFix": "",
-                             "sSearch": "搜尋",
-                             "sUrl": "",
-                             "oPaginate": {
-                                 "sFirst": "首頁",
-                                 "sPrevious": "上頁",
-                                 "sNext": "下頁",
-                                 "sLast": "末頁"
-                             }
-                         },
-                         "columns": [
-                             { "data": "Date", "name": "Date", "autoWidth": true },
-                             {
-                                 "data": "Title", "name": "Title", "autoWidth": true,
-                                 //"render": function (data, type) {
-                                 //    if (type === 'display') {
-                                 //        if (data.length > 21) {
-                                 //            return '<div class="text-center" title="' + data + '">' + data.substr(0, 21) + '...</div>';
-                                 //        } else {
-                                 //            return '<div class="text-center" title="' + data + '">' + data + '</div>';
-                                 //        }
-                                 //    }
-                                 //    return data;
-                                 //}
-                             },
-                             { "data": "Info", "name": "Info", "autoWidth": true },
-                             {
-                                 "data": "Increment", "name": "Increment", "autoWidth": true,
-                                 "render": function (data) {
-                                     return '<a style="width:80px" href="#" id="Edit_info" onclick="Delete_announcement(' + data + ')"><i class="fas fa-trash-alt"></i></a>'
-                                 }
-                             },
-                         ],
-                         "columnDefs": [
-                             { "className": "dt-center", "targets": "_all" }
-                         ],
-                     });
-                 });
-             }
-             function Delete_announcement(data) {
-                 $.ajax({
-                     url: "Announcement.asmx/delete",
-                     method: "post",
-                     dataType: "json",
-                     data: {
-                         ID: data,
-                     },
-                     success: function (data) {
-                         IT_announcement_board.ajax.reload();
-                         IT_Am.ajax.reload();
-                         swal({
-                             title: "成功刪除!",
-                             text: data + " 已刪除",
-                             type: "success",
-                             showCancelButton: true,
-                             confirmButtonClass: "btn-danger",
-                             confirmButtonText: "確定",
-                             cancelButtonText: "取消",
-                             closeOnConfirm: false
-                         });
-
-                     },
-                     error: function (err) { }
-                 })
-             }
-             var LSD;
-             $(document).ready(function () {
-                 LSD = $('#Leader_S_DataTable').DataTable({
-                     "serverSide": true,
-                     "searching": false,
-                     "lengthChange": false,
-                     "bPaginate": false,
-                     "responsive": true,
-                     "pageLength": 100,
-                     //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                     "ajax": {
-                         "url": "SearchNew_schedule.asmx/Leader_viewer",
-                         "type": "GET",
-                         "datatype": "json",
-                         "data": function (d) {
-                             if ($('#Index_date_picker_input').val().length > 0) {
-                                 d.search = $('#Index_date_picker_input').val();
-                             }
-                             else {
-                                 d.search = "";
-                             }
-                         },
-                         "dataSrc": function (json) {
-                             json.draw = json.data.draw;
-                             json.recordsTotal = json.data.iTotalRecords;
-                             json.recordsFiltered = json.data.iTotalDisplayRecords;
-                             return json.data;
-                         },
-                     },
-
-                     "oLanguage": {
-                         "sProcessing": "處理中...",
-                         "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                         "sZeroRecords": "無任何行程",
-                         "sInfo": "今日行程總筆數：_TOTAL_",
-                         "sInfoEmpty": "無任何行程",
-                         "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                         "sInfoPostFix": "",
-                         "sSearch": "搜尋",
-                         "sUrl": "",
-                         "oPaginate": {
-                             "sFirst": "首頁",
-                             "sPrevious": "上頁",
-                             "sNext": "下頁",
-                             "sLast": "末頁"
-                         }
-                     },
-                     "columns": [
-                         { "data": "S_time", "name": "S_time", "autoWidth": true },
-                         {
-                             "data": "Work_item", "name": "Work_item", "autoWidth": true,
-                             "render": function (data, type) {
-                                 if (type === 'display') {
-                                     if (data.length > 13) {
-                                         return '<div class="text-center" title="' + data + '">' + data.substr(0, 12) + '...</div>';
-                                     } else {
-                                         return '<div class="text-center" title="' + data + '">' + data + '</div>';
-                                     }
-                                 }
-                                 return data;
-                             }
-                         },
-                         { "data": "Local", "name": "Local", "autoWidth": true },
-                         { "data": "S_host", "name": "S_host", "autoWidth": true },
-                         { "data": "Participants", "name": "Participants", "autoWidth": true, "orderable": true },
-                         { "data": "Duty", "name": "Duty", "autoWidth": true },
-                     ],
-                     "columnDefs": [
-                         { "className": "dt-center", "targets": "_all" }
-                     ],
-                 });
-             });
-
-             $(document).on('click', '#new_Announcement', function () {
-                 $.confirm({
-                     icon: 'far fa-user',
-                     title: '新增公告',
-                     content:
-                     '<form action="" class="formName">' +
-                     '<div class="form-group">' +
-                     '<label>事項:</label>' +
-                     '<input type="text" maxlength="30" class="edit_Announcement_Title form-control">' +
-                     '</div>' +
-                     '<div class="form-group">' +
-                     '<label>詳情:</label>' +
-                     '<textarea rows="7" class="edit_Announcement_Info form-control" placeholder="">' + '</textarea>' +
-                     '</div>' +
-                     '</form>',
-
-                     type: 'dark',
-                     typeAnimated: true,
-                     buttons: {
-                         formSubmit: {
-                             text: '確定',
-                             btnClass: 'btn-blue',
-                             action: function () {
-                                 var edit_Announcement_Title = this.$content.find('.edit_Announcement_Title').val();
-                                 var edit_Announcement_Info = this.$content.find('.edit_Announcement_Info').val();
-                                 if (edit_Announcement_Title.length != 0 && edit_Announcement_Info.length != 0) {
-                                     $.ajax({
-                                         url: "Announcement.asmx/New_Info",
-                                         method: "post",
-                                         dataType: "json",
-                                         data: {
-                                             Title: edit_Announcement_Title,
-                                             Info: edit_Announcement_Info,
-                                         },
-                                         success: function (data) {
-                                             IT_announcement_board.ajax.reload();
-                                             IT_Am.ajax.reload();
-                                         },
-                                         error: function (err) { }
-
-                                     });
-
-                                 }
-                                 else {
-                                     //顯示錯誤訊息
-                                     $.alert("空白");
-                                     return false;
-                                 }
-
-                             }
-                         },
-                         tryAgain: {
-                             text: '取消',
-                             btnClass: 'btn-dark',
-                             action: function () {
-                             }
-                         },
-                     },
-                     onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
-                         // bind to events
-                         var jc = this;
-                         this.$content.find('form').on('submit', function (e) {
-                             // if the user submits the form by pressing enter in the field.
-                             e.preventDefault();
-                             jc.$$formSubmit.trigger('click'); // reference the button and click it
-                         });
-                     }
-                 });
-             });
-
-
-             $(document).on('click', '#new_Message', function () {
-                 $.confirm({
-                     icon: 'far fa-user',
-                     title: '我要留言',
-                     content:
-                     '<form action="" class="formName">' +
-                     '<div class="form-group">' +
-                     '<label>留言人:</label>' +
-                     '<input type="text" maxlength="30" class="edit_Message_commenter form-control">' +
-                     '</div>' +
-                     '<label>分機:</label>' +
-                     '<input type="text" maxlength="30" class="edit_Message_phone form-control">' +
-                     '</div>' +
-                     '<div class="form-group">' +
-                     '<label>內容:</label>' +
-                     '<textarea rows="7" class="edit_Message_Info form-control" placeholder="">' + '</textarea>' +
-                     '</div>' +
-                     '</form>',
-
-                     type: 'dark',
-                     typeAnimated: true,
-                     buttons: {
-                         formSubmit: {
-                             text: '確定',
-                             btnClass: 'btn-blue',
-                             action: function () {
-                                 var edit_Message_commenter = this.$content.find('.edit_Message_commenter').val();
-                                 var edit_Message_phone = this.$content.find('.edit_Message_phone').val();
-                                 var edit_Message_info = this.$content.find('.edit_Message_Info').val();
-                                 if (edit_Message_commenter.length != 0 && edit_Message_phone.length != 0 && edit_Message_info != 0) {
-                                     $.ajax({
-                                         url: "MsgBoard.asmx/New_Message",
-                                         method: "post",
-                                         dataType: "json",
-                                         data: {
-                                             Commenter: edit_Message_commenter,
-                                             Phone: edit_Message_phone,
-                                             Message: edit_Message_info,
-                                         },
-                                         success: function (data) {
-                                             MegBoard.ajax.reload();
-                                         },
-                                         error: function (err) { }
-
-                                     });
-
-                                 }
-                                 else {
-                                     //顯示錯誤訊息
-                                     $.alert("欄位空白");
-                                     return false;
-                                 }
-
-                             }
-                         },
-                         tryAgain: {
-                             text: '取消',
-                             btnClass: 'btn-dark',
-                             action: function () {
-                             }
-                         },
-                     },
-                     onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
-                         // bind to events
-                         var jc = this;
-                         this.$content.find('form').on('submit', function (e) {
-                             // if the user submits the form by pressing enter in the field.
-                             e.preventDefault();
-                             jc.$$formSubmit.trigger('click'); // reference the button and click it
-                         });
-                     }
-                 });
-             });
-
-
-
-
-
-    </script>
-
-
-    <%----%>
-    <script>
-             var GSoutD;
+        var IT_Am;
+        var IT_announcement_board;
+        var MegBoard;
         $(document).ready(function () {
-            GSoutD = $('#group_Sout_DataTable').DataTable({
+            MegBoard = $('#MessageBoard_table').DataTable({
+                "serverSide": true,
+                "searching": false,
+                "lengthChange": false,
+                "bPaginate": true,
+                "responsive": true,
+                "pageLength": 5,
+                "fixedColumns": {
+                    leftColumns: 2
+                },
+                //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "ajax": {
+                    "url": "MsgBoard.asmx/get_Message",
+                    "type": "GET",
+                    "datatype": "json",
+                    "dataSrc": function (json) {
+                        json.draw = json.data.draw;
+                        json.recordsTotal = json.data.iTotalRecords;
+                        json.recordsFiltered = json.data.iTotalDisplayRecords;
+
+                        return json.data;
+                    },
+                },
+
+                "oLanguage": {
+                    "sProcessing": "處理中...",
+                    "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                    "sZeroRecords": "無任何留言",
+                    "sInfo": "留言總筆數：_TOTAL_",
+                    "sInfoEmpty": "無任何留言",
+                    "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜尋",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "首頁",
+                        "sPrevious": "上頁",
+                        "sNext": "下頁",
+                        "sLast": "末頁"
+                    }
+                },
+                "columns": [
+                    {
+                        "data": "commenter", "name": "commenter",
+                        "render": function (data) {
+                            return '<div  class="text-center" >' + data + '</div>';
+                        }
+                    },
+                    {
+                        "data": "insert_date", "name": "insert_date",
+                        "render": function (data) {
+                            return '<div  class="text-center" >' + data + '</div>';
+                        }
+                    },
+                    {
+                        "data": "feedback", "name": "feedback",
+                        "render": function (data) {
+                            if (data.length != 0)
+                                return '<i  class="fas fa-check"></i>';
+                            else
+                                return '<i  class="fas fa-times"></i>';
+                        }
+                    },
+                    {
+                        "data": "strId", "name": "strId",
+                        "render": function (data) {
+                            return '<a href="#" class="text-center" onclick="show_MessageDetail(\'' + data + '\')"><i class="fas fa-search">查看詳情</i></a>';
+                        }
+                    },
+                ],
+                "columnDefs": [
+                    {
+                        "className": "dt-center", "targets": "_all",
+                    }],
+            });
+        });
+        function show_MessageDetail(ID) {
+            $.ajax({
+                url: "MsgBoard.asmx/Msg_SearchByID",
+                method: "post",
+                dataType: "json",
+                data: {
+                    ID: ID,
+                },
+                success: function (data) {
+                    var Message_result;
+                    if (data[0].feedback != 0)
+                        Message_result = data[0].message + "\r\n\r\n" + "[回覆]\r\n" + data[0].feedback;
+                    else
+                        Message_result = data[0].message;
+                    $.confirm({
+                        icon: 'far fa-user',
+                        title: '詳情',
+                        content:
+                        '<form action="" class="formName">' +
+                        '<div class="form-group">' +
+                        '<label>留言人:</label>' +
+                        '<input type="text" readonly class="form-control" value="' + data[0].commenter + '">' +
+                        '</div>' +
+                        '<form action="" class="formName">' +
+                        '<div class="form-group">' +
+                        '<label>分機:</label>' +
+                        '<input type="text" readonly class="form-control" value="' + data[0].phone + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label>留言時間:</label>' +
+                        '<input type="text" readonly class="form-control" value="' + data[0].insert_date + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label>留言內容:</label>' +
+                        '<textarea rows="5" readonly class="form-control" >' + Message_result + '</textarea>' +
+                        '</div>' +
+                        '</form>',
+
+                        type: 'green',
+                        typeAnimated: true,
+                        buttons: {
+                            tryAgain: {
+                                text: '返回',
+                                btnClass: 'btn-green',
+                                action: function () {
+                                }
+                            },
+                        },
+                        //onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
+                        //    // bind to events
+                        //    var jc = this;
+                        //    this.$content.find('form').on('submit', function (e) {
+                        //        // if the user submits the form by pressing enter in the field.
+                        //        e.preventDefault();
+                        //        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                        //    });
+                        //}
+                    });
+                },
+                error: function (err) { }
+
+            });
+        }
+
+
+        $(document).ready(function () {
+            IT_announcement_board = $('#IT_announcements').DataTable({
+                "serverSide": true,
+                "searching": false,
+                "lengthChange": false,
+                "bPaginate": true,
+                "responsive": true,
+                "pageLength": 5,
+                "fixedColumns": {
+                    leftColumns: 2
+                },
+                //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "ajax": {
+                    "url": "Announcement.asmx/Get_Info",
+                    "type": "GET",
+                    "datatype": "json",
+                    "dataSrc": function (json) {
+                        json.draw = json.data.draw;
+                        json.recordsTotal = json.data.iTotalRecords;
+                        json.recordsFiltered = json.data.iTotalDisplayRecords;
+
+                        return json.data;
+                    },
+                },
+
+                "oLanguage": {
+                    "sProcessing": "處理中...",
+                    "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                    "sZeroRecords": "無符合公告",
+                    "sInfo": "公告總筆數：_TOTAL_",
+                    "sInfoEmpty": "無任何公告",
+                    "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜尋",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "首頁",
+                        "sPrevious": "上頁",
+                        "sNext": "下頁",
+                        "sLast": "末頁"
+                    }
+                },
+                "columns": [
+                    {
+                        "data": "Title", "name": "Title",
+                        "render": function (data) {
+                            return '<div style="width: 200px">' + data + '</div>';
+                        }
+                    },
+                    {
+                        "data": "Increment", "name": "Increment",
+                        "render": function (data) {
+                            return '<a  href="#" style="width: 5px" onclick="show_announcement(' + data + ')"><i class="fas fa-search">查看</i></a>';
+                        }
+                    },
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 1,
+                        "className": "text-center",
+                    }],
+            });
+        });
+
+        function show_announcement(ID) {
+            $.ajax({
+                url: "Announcement.asmx/SearchById",
+                method: "post",
+                dataType: "json",
+                data: {
+                    ID: ID,
+                },
+                success: function (data) {
+                    $.confirm({
+                        icon: 'far fa-user',
+                        title: '資訊室公告',
+                        content:
+                        '<form action="" class="formName">' +
+                        '<div class="form-group">' +
+                        '<label>事項:</label>' +
+                        '<input type="text" readonly class="edit_Announcement_Title form-control" value="' + data[0].Title + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label>詳情:</label>' +
+                        '<textarea rows="7" readonly class="edit_Announcement_Info form-control" >' + data[0].Info + '</textarea>' +
+                        '</div>' +
+                        '</form>',
+
+                        type: 'green',
+                        typeAnimated: true,
+                        buttons: {
+                            tryAgain: {
+                                text: '返回',
+                                btnClass: 'btn-green',
+                                action: function () {
+                                }
+                            },
+                        },
+                        //onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
+                        //    // bind to events
+                        //    var jc = this;
+                        //    this.$content.find('form').on('submit', function (e) {
+                        //        // if the user submits the form by pressing enter in the field.
+                        //        e.preventDefault();
+                        //        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                        //    });
+                        //}
+                    });
+                },
+                error: function (err) { }
+
+            });
+        }
+        function Load_ITAnnounce_ManageDatatable() {
+            $(document).ready(function () {
+                IT_Am = $('#IT_Announcement_management_DataTable').DataTable({
+                    "serverSide": true,
+                    "searching": false,
+                    "lengthChange": false,
+                    "bPaginate": true,
+                    "responsive": true,
+                    "pageLength": 5,
+                    //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "ajax": {
+                        "url": "Announcement.asmx/Get_Info",
+                        "type": "GET",
+                        "datatype": "json",
+                        "dataSrc": function (json) {
+                            json.draw = json.data.draw;
+                            json.recordsTotal = json.data.iTotalRecords;
+                            json.recordsFiltered = json.data.iTotalDisplayRecords;
+
+                            return json.data;
+                        },
+                    },
+
+                    "oLanguage": {
+                        "sProcessing": "處理中...",
+                        "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                        "sZeroRecords": "無符合公告",
+                        "sInfo": "公告總筆數：_TOTAL_",
+                        "sInfoEmpty": "無任何公告",
+                        "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                        "sInfoPostFix": "",
+                        "sSearch": "搜尋",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "首頁",
+                            "sPrevious": "上頁",
+                            "sNext": "下頁",
+                            "sLast": "末頁"
+                        }
+                    },
+                    "columns": [
+                        { "data": "Date", "name": "Date", "autoWidth": true },
+                        {
+                            "data": "Title", "name": "Title", "autoWidth": true,
+                            //"render": function (data, type) {
+                            //    if (type === 'display') {
+                            //        if (data.length > 21) {
+                            //            return '<div class="text-center" title="' + data + '">' + data.substr(0, 21) + '...</div>';
+                            //        } else {
+                            //            return '<div class="text-center" title="' + data + '">' + data + '</div>';
+                            //        }
+                            //    }
+                            //    return data;
+                            //}
+                        },
+                        { "data": "Info", "name": "Info", "autoWidth": true },
+                        {
+                            "data": "Increment", "name": "Increment", "autoWidth": true,
+                            "render": function (data) {
+                                return '<a style="width:80px" href="#" id="Edit_info" onclick="Delete_announcement(' + data + ')"><i class="fas fa-trash-alt"></i></a>'
+                            }
+                        },
+                    ],
+                    "columnDefs": [
+                        { "className": "dt-center", "targets": "_all" }
+                    ],
+                });
+            });
+        }
+        function Delete_announcement(data) {
+            $.ajax({
+                url: "Announcement.asmx/delete",
+                method: "post",
+                dataType: "json",
+                data: {
+                    ID: data,
+                },
+                success: function (data) {
+                    IT_announcement_board.ajax.reload();
+                    IT_Am.ajax.reload();
+                    swal({
+                        title: "成功刪除!",
+                        text: data + " 已刪除",
+                        type: "success",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "確定",
+                        cancelButtonText: "取消",
+                        closeOnConfirm: false
+                    });
+
+                },
+                error: function (err) { }
+            })
+        }
+        var LSD;
+        $(document).ready(function () {
+            LSD = $('#Leader_S_DataTable').DataTable({
                 "serverSide": true,
                 "searching": false,
                 "lengthChange": false,
@@ -2245,7 +2018,7 @@
                 "pageLength": 100,
                 //"dom": '<"top"i>rt<"bottom"lp><"clear">',
                 "ajax": {
-                    "url": "SearchNew_schedule.asmx/Group_Sout_viewer",
+                    "url": "SearchNew_schedule.asmx/Leader_viewer",
                     "type": "GET",
                     "datatype": "json",
                     "data": function (d) {
@@ -2306,11 +2079,238 @@
                 ],
             });
         });
+
+        $(document).on('click', '#new_Announcement', function () {
+            $.confirm({
+                icon: 'far fa-user',
+                title: '新增公告',
+                content:
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>事項:</label>' +
+                '<input type="text" maxlength="30" class="edit_Announcement_Title form-control">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>詳情:</label>' +
+                '<textarea rows="7" class="edit_Announcement_Info form-control" placeholder="">' + '</textarea>' +
+                '</div>' +
+                '</form>',
+
+                type: 'dark',
+                typeAnimated: true,
+                buttons: {
+                    formSubmit: {
+                        text: '確定',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var edit_Announcement_Title = this.$content.find('.edit_Announcement_Title').val();
+                            var edit_Announcement_Info = this.$content.find('.edit_Announcement_Info').val();
+                            if (edit_Announcement_Title.length != 0 && edit_Announcement_Info.length != 0) {
+                                $.ajax({
+                                    url: "Announcement.asmx/New_Info",
+                                    method: "post",
+                                    dataType: "json",
+                                    data: {
+                                        Title: edit_Announcement_Title,
+                                        Info: edit_Announcement_Info,
+                                    },
+                                    success: function (data) {
+                                        IT_announcement_board.ajax.reload();
+                                        IT_Am.ajax.reload();
+                                    },
+                                    error: function (err) { }
+
+                                });
+
+                            }
+                            else {
+                                //顯示錯誤訊息
+                                $.alert("空白");
+                                return false;
+                            }
+
+                        }
+                    },
+                    tryAgain: {
+                        text: '取消',
+                        btnClass: 'btn-dark',
+                        action: function () {
+                        }
+                    },
+                },
+                onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        // if the user submits the form by pressing enter in the field.
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('click', '#new_Message', function () {
+            $.confirm({
+                icon: 'far fa-user',
+                title: '我要留言',
+                content:
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>留言人:</label>' +
+                '<input type="text" maxlength="30" class="edit_Message_commenter form-control">' +
+                '</div>' +
+                '<label>分機:</label>' +
+                '<input type="text" maxlength="30" class="edit_Message_phone form-control">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>內容:</label>' +
+                '<textarea rows="7" class="edit_Message_Info form-control" placeholder="">' + '</textarea>' +
+                '</div>' +
+                '</form>',
+
+                type: 'dark',
+                typeAnimated: true,
+                buttons: {
+                    formSubmit: {
+                        text: '確定',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var edit_Message_commenter = this.$content.find('.edit_Message_commenter').val();
+                            var edit_Message_phone = this.$content.find('.edit_Message_phone').val();
+                            var edit_Message_info = this.$content.find('.edit_Message_Info').val();
+                            if (edit_Message_commenter.length != 0 && edit_Message_phone.length != 0 && edit_Message_info != 0) {
+                                $.ajax({
+                                    url: "MsgBoard.asmx/New_Message",
+                                    method: "post",
+                                    dataType: "json",
+                                    data: {
+                                        Commenter: edit_Message_commenter,
+                                        Phone: edit_Message_phone,
+                                        Message: edit_Message_info,
+                                    },
+                                    success: function (data) {
+                                        MegBoard.ajax.reload();
+                                    },
+                                    error: function (err) { }
+
+                                });
+
+                            }
+                            else {
+                                //顯示錯誤訊息
+                                $.alert("欄位空白");
+                                return false;
+                            }
+
+                        }
+                    },
+                    tryAgain: {
+                        text: '取消',
+                        btnClass: 'btn-dark',
+                        action: function () {
+                        }
+                    },
+                },
+                onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        // if the user submits the form by pressing enter in the field.
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+        });
+
+
+
+
+
+    </script>
+
+
+    <%----%>
+    <script>
+             var GSoutD;
+             $(document).ready(function () {
+                 GSoutD = $('#group_Sout_DataTable').DataTable({
+                     "serverSide": true,
+                     "searching": false,
+                     "lengthChange": false,
+                     "bPaginate": false,
+                     "responsive": true,
+                     "pageLength": 100,
+                     //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                     "ajax": {
+                         "url": "SearchNew_schedule.asmx/Group_Sout_viewer",
+                         "type": "GET",
+                         "datatype": "json",
+                         "data": function (d) {
+                             if ($('#Index_date_picker_input').val().length > 0) {
+                                 d.search = $('#Index_date_picker_input').val();
+                             }
+                             else {
+                                 d.search = "";
+                             }
+                         },
+                         "dataSrc": function (json) {
+                             json.draw = json.data.draw;
+                             json.recordsTotal = json.data.iTotalRecords;
+                             json.recordsFiltered = json.data.iTotalDisplayRecords;
+                             return json.data;
+                         },
+                     },
+
+                     "oLanguage": {
+                         "sProcessing": "處理中...",
+                         "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                         "sZeroRecords": "無任何行程",
+                         "sInfo": "今日行程總筆數：_TOTAL_",
+                         "sInfoEmpty": "無任何行程",
+                         "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                         "sInfoPostFix": "",
+                         "sSearch": "搜尋",
+                         "sUrl": "",
+                         "oPaginate": {
+                             "sFirst": "首頁",
+                             "sPrevious": "上頁",
+                             "sNext": "下頁",
+                             "sLast": "末頁"
+                         }
+                     },
+                     "columns": [
+                         { "data": "S_time", "name": "S_time", "autoWidth": true },
+                         {
+                             "data": "Work_item", "name": "Work_item", "autoWidth": true,
+                             "render": function (data, type) {
+                                 if (type === 'display') {
+                                     if (data.length > 13) {
+                                         return '<div class="text-center" title="' + data + '">' + data.substr(0, 12) + '...</div>';
+                                     } else {
+                                         return '<div class="text-center" title="' + data + '">' + data + '</div>';
+                                     }
+                                 }
+                                 return data;
+                             }
+                         },
+                         { "data": "Local", "name": "Local", "autoWidth": true },
+                         { "data": "S_host", "name": "S_host", "autoWidth": true },
+                         { "data": "Participants", "name": "Participants", "autoWidth": true, "orderable": true },
+                         { "data": "Duty", "name": "Duty", "autoWidth": true },
+                     ],
+                     "columnDefs": [
+                         { "className": "dt-center", "targets": "_all" }
+                     ],
+                 });
+             });
     </script>
     <script>
-        var GSD; 
+        var GSD;
         $(document).ready(function () {
-          GSD = $('#group_S_DataTable').DataTable({
+            GSD = $('#group_S_DataTable').DataTable({
                 "serverSide": true,
                 "searching": false,
                 "lengthChange": false,
@@ -2855,7 +2855,7 @@
                             type: "success",
                             confirmButtonClass: "btn-success",
                             confirmButtonText: "確定",
-                        }, )
+                        });
                         //swal("系統訊息", data, "success");
 
                         //$.confirm({
@@ -3550,123 +3550,123 @@
         });
     </script>
     <script>
-            $('#PR_management_picker').datetimepicker({
-                language: 'zh-TW',
-                weekStart: 1,
-                todayBtn: 1,
-                autoclose: 1,
-                todayHighlight: 1,
-                //startView: 2,
-                minView: 2,
-                forceParse: 0,
-                format: "yyyy-mm-dd DD ",
+        $('#PR_management_picker').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            //startView: 2,
+            minView: 2,
+            forceParse: 0,
+            format: "yyyy-mm-dd DD ",
+        });
+
+        var PR_Datatable;
+        function Load_PR_Datatable() {
+            $(document).ready(function () {
+                PR_Datatable = $('#PersonnelRoom_DataTable').DataTable({
+                    "serverSide": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "pageLength": 5,
+                    //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                    "ajax": {
+                        "url": "PersonnelRoom.asmx/Show_leave",
+                        "type": "GET",
+                        "datatype": "json",
+                        "data": function (d) {
+                            //d.user = account_user;
+                            //d.authority = account_authority;
+                        },
+                        "dataSrc": function (json) {
+                            json.draw = json.data.draw;
+                            json.recordsTotal = json.data.iTotalRecords;
+                            json.recordsFiltered = json.data.iTotalDisplayRecords;
+                            return json.data;
+                        },
+
+                    },
+
+                    "oLanguage": {
+                        "sProcessing": "處理中...",
+                        "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                        "sZeroRecords": "無符合資料",
+                        "sInfo": "帳號筆數：_TOTAL_",
+                        "sInfoEmpty": "無任何資料",
+                        "sInfoFiltered": "(過濾總筆數 _MAX_)",
+                        "sInfoPostFix": "",
+                        "sSearch": "搜尋",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "首頁",
+                            "sPrevious": "上頁",
+                            "sNext": "下頁",
+                            "sLast": "末頁"
+                        }
+                    },
+                    "columns": [
+                        { "data": "Date", "name": "Date", "autoWidth": true },
+                        { "data": "Staff", "name": "Staff", "autoWidth": true },
+                        { "data": "Reason", "name": "Reason", "autoWidth": true },
+                        { "data": "Create_time", "name": "Create_time", "autoWidth": true },
+                        {
+                            "data": "strId", "name": "strId", "autoWidth": true,
+                            "render": function (data) {
+                                return '<a style="width:80px" href="#" onclick="Delete_PRleave(\'' + data + '\')"><i class="fas fa-trash-alt"></i></a>'
+                            }
+                        },
+                    ],
+                    "columnDefs": [
+                        { "className": "dt-center", "targets": "_all" }
+                    ],
+                });
+            });
+        }
+        function Delete_PRleave(data) {
+            $.confirm({
+                icon: 'fas fa-minus-circle',
+                title: '確認刪除',
+                content: '刪除出勤資料 ' + data,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    Submit: {
+                        text: '刪除',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $.ajax({
+                                url: "PersonnelRoom.asmx/Delete_PR",
+                                method: "post",
+                                dataType: "json",
+                                data: {
+                                    ID: data,
+                                },
+                                success: function (data) {
+                                    swal({
+                                        title: "成功刪除!",
+                                        text: data,
+                                        type: "success",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-success",
+                                        confirmButtonText: "確定",
+                                        cancelButtonText: "取消",
+                                        closeOnConfirm: false
+                                    });
+                                    PR_Datatable.ajax.reload();
+                                },
+                                error: function (err) { }
+                            })
+                        }
+                    },
+                    Cannel: {
+                        text: '取消',
+                        btnClass: 'btn-green',
+                    },
+                }
             });
 
-            var PR_Datatable;
-            function Load_PR_Datatable() {
-                $(document).ready(function () {
-                    PR_Datatable = $('#PersonnelRoom_DataTable').DataTable({
-                        "serverSide": true,
-                        "lengthChange": false,
-                        "searching": false,
-                        "pageLength": 5,
-                        //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                        "ajax": {
-                            "url": "PersonnelRoom.asmx/Show_leave",
-                            "type": "GET",
-                            "datatype": "json",
-                            "data": function (d) {
-                                //d.user = account_user;
-                                //d.authority = account_authority;
-                            },
-                            "dataSrc": function (json) {
-                                json.draw = json.data.draw;
-                                json.recordsTotal = json.data.iTotalRecords;
-                                json.recordsFiltered = json.data.iTotalDisplayRecords;
-                                return json.data;
-                            },
-
-                        },
-
-                        "oLanguage": {
-                            "sProcessing": "處理中...",
-                            "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                            "sZeroRecords": "無符合資料",
-                            "sInfo": "帳號筆數：_TOTAL_",
-                            "sInfoEmpty": "無任何資料",
-                            "sInfoFiltered": "(過濾總筆數 _MAX_)",
-                            "sInfoPostFix": "",
-                            "sSearch": "搜尋",
-                            "sUrl": "",
-                            "oPaginate": {
-                                "sFirst": "首頁",
-                                "sPrevious": "上頁",
-                                "sNext": "下頁",
-                                "sLast": "末頁"
-                            }
-                        },
-                        "columns": [
-                            { "data": "Date", "name": "Date", "autoWidth": true },
-                            { "data": "Staff", "name": "Staff", "autoWidth": true },
-                            { "data": "Reason", "name": "Reason", "autoWidth": true },
-                            { "data": "Create_time", "name": "Create_time", "autoWidth": true },
-                            {
-                                "data": "strId", "name": "strId", "autoWidth": true,
-                                "render": function (data) {
-                                    return '<a style="width:80px" href="#" onclick="Delete_PRleave(\'' + data + '\')"><i class="fas fa-trash-alt"></i></a>'
-                                }
-                            },
-                        ],
-                        "columnDefs": [
-                            { "className": "dt-center", "targets": "_all" }
-                        ],
-                    });
-                });
-            }
-            function Delete_PRleave(data) {
-                $.confirm({
-                    icon: 'fas fa-minus-circle',
-                    title: '確認刪除',
-                    content: '刪除出勤資料 ' + data,
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        Submit: {
-                            text: '刪除',
-                            btnClass: 'btn-red',
-                            action: function () {
-                                $.ajax({
-                                    url: "PersonnelRoom.asmx/Delete_PR",
-                                    method: "post",
-                                    dataType: "json",
-                                    data: {
-                                        ID: data,
-                                    },
-                                    success: function (data) {
-                                        swal({
-                                            title: "成功刪除!",
-                                            text: data,
-                                            type: "success",
-                                            showCancelButton: true,
-                                            confirmButtonClass: "btn-success",
-                                            confirmButtonText: "確定",
-                                            cancelButtonText: "取消",
-                                            closeOnConfirm: false
-                                        });
-                                        PR_Datatable.ajax.reload();
-                                    },
-                                    error: function (err) { }
-                                })
-                            }
-                        },
-                        Cannel: {
-                            text: '取消',
-                            btnClass: 'btn-green',
-                        },
-                    }
-                });
-
-            }
+        }
 
 
 
@@ -4885,53 +4885,6 @@
         </div>
     </div>
 
-    <div id="Plumber_DownloadForm_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div style="padding: 35px 50px; background-color: #337ab7;">
-                    <button type="button" id="Plumber_DownloadForm_Modall_cannel" class="close" data-dismiss="modal">&times;</button>
-                    <h4 style="background-color: #337ab7;"><span class="glyphicon glyphicon-copy"></span>表格產生</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12" style="text-align: right">
-                            <button type="button" id="Download_PlumberForm" onclick="DownloadPlumberForm()" class="btn btn-info">下載表格</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>   
-            function DownloadPlumberForm() {
-                var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
-                var list = [$(ResultTable).html()];
-                var jsonText = JSON.stringify({ list: list });
-                //檔案下載網址
-                var url = "/Download.ashx";
-
-                //產生 form
-                var form = document.createElement("form");
-                form.method = "POST";
-                form.action = url;
-
-                //如果想要另開視窗可加上target
-                //form.target = "_blank";
-                //index為要下載的檔案編號，存入hidden跟表單一起送出
-
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "Parameter";
-                input.value = "1";
-                form.appendChild(input);
-
-                //送出表單並移除 form
-                var body = document.getElementsByTagName("body")[0];
-                body.appendChild(form);
-                form.submit();
-                form.remove();
-            }
-    </script>
     <script>
             var PMDB;
             var count_ajax = 0;
@@ -5033,7 +4986,7 @@
                                 //"data": "id.Increment", "name": "id.Increment", "autoWidth": true,
                                 "data": "strid", "name": "strid", "autoWidth": true,
                                 "render": function (data, type, row, meta) {
-                                    return '<a href="#" style="width:50px;" onclick="AddEditID_Plumber(\'' + data + '\')"><i class="fas fa-edit"></i></a>  <input type="checkbox" name="checklist" value="' + JSON.stringify(row) + '" />'
+                                    return '<a href="#" style="width:50px;" onclick="AddEditID_Plumber(\'' + data + '\')"><i class="fas fa-edit"></i></a>  <input type="checkbox" name="checklist" value="' + data + '" />'
 
                                 }
 
@@ -5046,56 +4999,59 @@
                     });
                 });
             }
-            function Generator_FormOnClick()
-            {
+            function Generator_FormOnClick() {
                 var c = [];
                 $("input[type=checkbox]:checked").each(function () {
                     c.push($(this).val());
                 });
                 //result = c.toString();
+                if (c.length == 0) {
+                    $.confirm({
+                        icon: 'far fa-check-circle',
+                        title: '錯誤',
+                        content: '請勾選需要產生表格的資料!',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-red',
 
-                for (var i = 0; i < c.length; i++)
-                {
-                    
-                    console.log(c[i]["unit"]);
+                            },
+                        }
+                    });
                 }
+                else {
+                    var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
+                    var list = [$(ResultTable).html()];
+                    var jsonText = JSON.stringify({ list: list });
+                    //檔案下載網址
+                    var url = "/Download.ashx";
 
-                //console.log(JSON.parse(JSON.stringify(c)));
-                console.log(c);
+                    //產生 form
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = url;
 
-                var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
-                var list = [$(ResultTable).html()];
-                var jsonText = JSON.stringify({ list: list });
-                //檔案下載網址
-                var url = "/Download.ashx";
+                    //如果想要另開視窗可加上target
+                    //form.target = "_blank";
+                    //index為要下載的檔案編號，存入hidden跟表單一起送出
 
-                //產生 form
-                var form = document.createElement("form");
-                form.method = "POST";
-                form.action = url;
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "Parameter";
+                    input.value = c;
+                    form.appendChild(input);
 
-                //如果想要另開視窗可加上target
-                //form.target = "_blank";
-                //index為要下載的檔案編號，存入hidden跟表單一起送出
-
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "Parameter";
-                input.value = c[0].status.toString();
-                form.appendChild(input);
-
-                //送出表單並移除 form
-                var body = document.getElementsByTagName("body")[0];
-                body.appendChild(form);
-                form.submit();
-                form.remove();
-
-
-
-
-
-
-
+                    //送出表單並移除 form
+                    var body = document.getElementsByTagName("body")[0];
+                    body.appendChild(form);
+                    form.submit();
+                    form.remove();
+                    $("input[name='checklist']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
             }
             function AddEditID_Plumber(data) {
                 console.log("data = " + data);

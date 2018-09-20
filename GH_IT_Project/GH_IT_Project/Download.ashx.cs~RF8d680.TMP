@@ -10,8 +10,7 @@ using MongoDB.Driver.Linq;
 using MongoDB;
 using MongoDB.Bson.Serialization.Attributes;
 using Word = Microsoft.Office.Interop.Word;
-using System.Globalization;
-using System.Diagnostics;
+
 
 namespace GH_IT_Project
 {
@@ -23,10 +22,9 @@ namespace GH_IT_Project
 
         public void ProcessRequest(HttpContext context)
         {
-            CloseWINWORD_Porcesses();
-            DeleteDOC(context, @"C:\Generate_Temp\");
             //接參數的index
-            string Filename = "派工單" + DateTime.Now.ToString("yyyy-MM-dd(HH點mm分)") + ".doc";
+            //string Filename = "派工單" + DateTime.Now.ToString("yyyy-MM-dd(HH點mm分)") + ".doc";
+            string Filename = "派工單" + DateTime.Now.ToString("yyyy-MM-dd(HH點mm分)") + ".txt";
             var Parameter = context.Request.Params["Parameter"];
             //MongoDB搜尋
             string[] Split_Para = Parameter.Split(',');
@@ -103,19 +101,29 @@ namespace GH_IT_Project
             //sw.WriteLine(Convert.ToString(""));
             //sw.Close();
 
-            ConvertByteAndOutput(context, CreateWord(Sorting_Data, Count_Number, Filename));
+            //ConvertByteAndOutput(context, CreateWord(Sorting_Data, Count_Number, Filename));
+            ConvertByteAndOutput(context, CreateWord(Sorting_Data, Count_Number, "text.txt"));
             
         }
         private string CreateWord(List<List<plumber_table>> Sorting_Data, List<CountNUnit> Count_Number, String SavePath)
         {
+            //System.Diagnostics.Process[] aProcWrd = System.Diagnostics.Process.GetProcessesByName("WINWORD");
+
+            //foreach (System.Diagnostics.Process oProc in aProcWrd)
+            //{
+            //    oProc.Kill();
+            //}
             int be = 0;
             int end = 0;
 
             object oEndOfDoc = "\\endofdoc";
             Word.Document oDoc = new Word.Document();
             Object Nothing = System.Reflection.Missing.Value;
-            object filepath = @"C:\Generate_Temp\" + SavePath; //IIS
-
+            //StreamWriter sw = new StreamWriter(@"C:\Users\info\source\repos\GH_IT_Project\GH_IT_Project\File\text.txt", false);
+            StreamWriter sw = new StreamWriter(@"C:\GH_IT\GH_IT_Project\GH_IT_Project\File\text.txt", false);
+            object filepath = @"C:\GH_IT\GH_IT_Project\GH_IT_Project\File\" + SavePath;
+            //object filepath = "~/File/" + SavePath; //IIS
+            //object filepath = @"C:\GH_IT\GH_IT_Project\GH_IT_Project\File\" + SavePath;
             Word.Application WordApp = new Word.Application();
             for (int i = 0; i < Count_Number.Count; i++)
             {
@@ -123,33 +131,33 @@ namespace GH_IT_Project
                 oDoc.Application.Visible = false;
                 oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;
                 dynamic oRange = oDoc.Content.Application.Selection.Range;//橫向
+                                                                          //oRange.Text += "岡山榮家工作班預約派工(修繕)單 (" + Count_Number[i].Unit +")";
+                                                                          //oRange.Font.Name = "標楷體";
+                                                                          //oRange.Font.Size = 16;
 
 
-
+                //Word.Paragraph oHeader;
                 oRange = oDoc.Content.Paragraphs.Add(ref Nothing);
                 oRange.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
                 oRange.Range.Text = "岡山榮家工作班預約派工(修繕)單 " + Count_Number[i].Unit;
                 oRange.Range.Font.Name = "標楷體";
-                oRange.Range.Font.Size = 17;
+                oRange.Range.Font.Size = 16;
                 oRange.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                
-
 
                 Word.Table Tables;
                 Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                Tables = oDoc.Tables.Add(wrdRng, Count_Number[i].Count + 4, 8, ref Nothing, ref Nothing);
+                Tables = oDoc.Tables.Add(wrdRng, Count_Number[i].Count + 4, 7, ref Nothing, ref Nothing);
                 Tables.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
                 Tables.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
                 Tables.AllowAutoFit = true;
                 oRange.Range.InsertBreak(Word.WdBreakType.wdPageBreak);//換頁
 
-                string[] title = new string[] { "項次", "申請事項", "地點", "報修日期","維修內容", "維修人員", "處理情形", "備註" };
+                string[] title = new string[] { "項次", "申請事項", "地點", "報修日期", "維修人員", "處理情形", "備註" };
                 for (int j = 1; j <= title.Length; j++)
                 {
                     Tables.Cell(1, j).Range.Text = title[j - 1];
                     Tables.Cell(1, j).Range.Font.Name = "標楷體";
                     Tables.Cell(1, j).Range.Font.Size = 16;
-                    Tables.Cell(1, j).Range.Font.Bold = 1;
                     Tables.Cell(1, j).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
                 }
                 if (i == 0)
@@ -161,44 +169,49 @@ namespace GH_IT_Project
                     be = end;
                     end = end + Count_Number[i].Count;
                 }
+                //sw.WriteLine(Convert.ToString(i +" be" + be + ",end" + end));
                 for (int j = be; j < end; j++)
                 {
 
                     Tables.Cell(count + 1, 1).Range.Text = (count).ToString();
                     Tables.Cell(count + 1, 1).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 1).Range.Font.Size = 10;
+                    Tables.Cell(count + 1, 1).Range.Font.Size = 9;
                     Tables.Cell(count + 1, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
                     Tables.Cell(count + 1, 2).Range.Text = Sorting_Data[j][0].fix_item;
                     Tables.Cell(count + 1, 2).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 2).Range.Font.Size = 13;
+                    Tables.Cell(count + 1, 2).Range.Font.Size = 11;
                     Tables.Cell(count + 1, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
                     Tables.Cell(count + 1, 3).Range.Text = Sorting_Data[j][0].location;
                     Tables.Cell(count + 1, 3).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 3).Range.Font.Size = 13;
+                    Tables.Cell(count + 1, 3).Range.Font.Size = 11;
                     Tables.Cell(count + 1, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    
-                    string[] ymd = Sorting_Data[j][0].time.Split(' ');
-                    Tables.Cell(count + 1, 4).Range.Text = ymd[0].ToString();
+                    Tables.Cell(count + 1, 4).Range.Text = Sorting_Data[j][0].time;
                     Tables.Cell(count + 1, 4).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 4).Range.Font.Size = 13;
+                    Tables.Cell(count + 1, 4).Range.Font.Size = 11;
                     Tables.Cell(count + 1, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    Tables.Cell(count + 1, 5).Range.Text = Sorting_Data[j][0].remark;
-                    Tables.Cell(count + 1, 5).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 5).Range.Font.Size = 13;
-                    Tables.Cell(count + 1, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                    Tables.Cell(count + 1, 6).Range.Text = "☐已修繕完成";
+                    Tables.Cell(count + 1, 6).Range.Text += "☐堂隊自行修繕完成";
+                    Tables.Cell(count + 1, 6).Range.Text += "☐請申請單位另填請購單備料";
+                    Tables.Cell(count + 1, 6).Range.Text += "☐需送廠商維修";
+                    Tables.Cell(count + 1, 6).Range.Font.Name = "標楷體";
+                    Tables.Cell(count + 1, 6).Range.Font.Size = 11;
+                    Tables.Cell(count + 1, 6).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
 
-                    Tables.Cell(count + 1, 7).Range.Text = "☐已修繕完成";
-                    Tables.Cell(count + 1, 7).Range.Text += "☐堂隊自行修繕完成";
-                    Tables.Cell(count + 1, 7).Range.Text += "☐請申請單位另填請購單備料";
-                    Tables.Cell(count + 1, 7).Range.Text += "☐需送廠商維修";
+
+                    Tables.Cell(count + 1, 7).Range.Text = Sorting_Data[j][0].remark;
                     Tables.Cell(count + 1, 7).Range.Font.Name = "標楷體";
-                    Tables.Cell(count + 1, 7).Range.Font.Size = 13;
-                    Tables.Cell(count + 1, 7).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
+                    Tables.Cell(count + 1, 7).Range.Font.Size = 11;
+                    Tables.Cell(count + 1, 7).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                    //sw.WriteLine(Convert.ToString("j = " + j ));
+                    //sw.WriteLine(Convert.ToString("List_temp = " + List_temp.Count));
+                    //for (int p = 0; p < List_temp.Count; p++)
+                    //{
+                    //sw.WriteLine(Convert.ToString(" Count_Number[" + i + "]  =" + Count_Number[i].Count.ToString() + Count_Number[i].Unit.ToString()));
+                    //}
                     count++;
                 }
 
@@ -206,54 +219,81 @@ namespace GH_IT_Project
                 Tables.Columns[2].AutoFit();
                 Tables.Columns[3].AutoFit();
                 Tables.Columns[4].AutoFit();
-                //Tables.Columns[5].AutoFit();
                 Tables.Columns[6].AutoFit();
                 Tables.Columns[7].AutoFit();
 
                 Tables.Cell(Count_Number[i].Count + 3, 1).Merge(Tables.Cell(Count_Number[i].Count + 3, 2));
                 Tables.Cell(Count_Number[i].Count + 3, 2).Merge(Tables.Cell(Count_Number[i].Count + 3, 3));
-                Tables.Cell(Count_Number[i].Count + 3, 3).Merge(Tables.Cell(Count_Number[i].Count + 3, 4));
+                //Tables.Cell(Count_Number[i].Count + 3, 4).Merge(Tables.Cell(Count_Number[i].Count + 3, 5));
 
                 Tables.Cell(Count_Number[i].Count + 4, 1).Merge(Tables.Cell(Count_Number[i].Count + 4, 2));
                 Tables.Cell(Count_Number[i].Count + 4, 2).Merge(Tables.Cell(Count_Number[i].Count + 4, 3));
-                Tables.Cell(Count_Number[i].Count + 4, 3).Merge(Tables.Cell(Count_Number[i].Count + 4, 4));
+                //Tables.Cell(Count_Number[i].Count + 4, 4).Merge(Tables.Cell(Count_Number[i].Count + 4, 5));
 
 
                 Tables.Cell(Count_Number[i].Count + 3, 1).Range.Text = "管理人";
                 Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Size = 11;
                 Tables.Cell(Count_Number[i].Count + 3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Bold = 1;
 
                 Tables.Cell(Count_Number[i].Count + 3, 2).Range.Text = "核派日期";
                 Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Size = 11;
                 Tables.Cell(Count_Number[i].Count + 3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Bold = 1;
+
 
                 Tables.Cell(Count_Number[i].Count + 3, 3).Range.Text = "申請單位簽名";
                 Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Size = 11;
                 Tables.Cell(Count_Number[i].Count + 3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Bold = 1;
 
                 Tables.Cell(Count_Number[i].Count + 3, 4).Range.Text = "結案日期";
                 Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Size = 11;
                 Tables.Cell(Count_Number[i].Count + 3, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Bold = 1;
 
                 Tables.Cell(Count_Number[i].Count + 3, 5).Range.Text = "主管";
                 Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Size = 11;
                 Tables.Cell(Count_Number[i].Count + 3, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Bold = 1;
+
 
                 //Tables.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitContent);//全部自動Fitting
                 Tables.Rows.Alignment = Word.WdRowAlignment.wdAlignRowCenter;
 
 
             }
+            //for (int p = 0; p < Count_Number.Count; p++)
+            //{
+            //    //sw.WriteLine("Count_Number = " + Count_Number[p].Count + "," + Count_Number[p].Unit);
+            //}
+            //for (int p = 0; p < Sorting_Data.Count; p++)
+            //{
+            //    for (int t = 0; t < Sorting_Data[p].Count; t++)
+            //    {
+            //       // sw.WriteLine("Sorting_Data = " + Sorting_Data[p][t].fix_item + "," + Sorting_Data[p][t].Unit);
+            //    }
+            //}
+
+            sw.WriteLine("SortingData = " + Sorting_Data.Count);
+            sw.Close();
+
+            //for (int k = 0; k < Sorting_Data.Count; k++)
+            //{
+            //    for (int j = 0; j < Sorting_Data[k].Count; j++)
+            //    {
+            //        oRange.Text += "SortingData" + Convert.ToString(Sorting_Data[k][j].Unit);
+            //    }
+            //}
+            //for (int l = 0; l < Count_Number.Count; l++)
+            //{
+            //    oRange.Text += "SortingData" + Convert.ToString(Count_Number[l]);
+            //}
+
+
+
+            //object ib = Word.WdBreakType.wdPageBreak; //分頁
+            //oRange.InsertBreak(ref ib);
 
 
             oDoc.SaveAs(ref filepath, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
@@ -263,14 +303,17 @@ namespace GH_IT_Project
         }
         private void ConvertByteAndOutput(HttpContext context, string fileName)
         {
+            //取得檔案在Server上的實體路徑 專案檔裡面的File資料夾
+            
+            var filePath = context.Server.MapPath("~/File/" + fileName);
+            //var filePath = context.Server.MapPath(@"C:\Users\info\source\repos\GH_IT_Project\GH_IT_Project\File\" + fileName);
             //讀取檔案並將檔案轉成二進制內容
             var output = new byte[0];
-            using (var fs = new FileStream(@"C:\Generate_Temp\" + fileName,
+            using (var fs = new FileStream(filePath,
                 FileMode.Open, FileAccess.Read))
             {
                 output = new byte[(int)fs.Length];
                 fs.Read(output, 0, output.Length);
-                fs.Close();
             }
 
             //將檔案輸出到瀏覽器
@@ -284,29 +327,7 @@ namespace GH_IT_Project
             context.Response.OutputStream.Write(output, 0, output.Length);
             context.Response.Flush();
             context.Response.End();
-            CloseWINWORD_Porcesses();
-            
-            File.Delete(@"C:\Generate_Temp\" + fileName);
 
-        }
-        private void CloseWINWORD_Porcesses()
-        {
-            Process[] aProcWrd = Process.GetProcessesByName("WINWORD");
-
-            foreach (System.Diagnostics.Process oProc in aProcWrd)
-            {
-
-                oProc.CloseMainWindow();
-            }
-        }
-        private void DeleteDOC(HttpContext context,string WordPath)
-        {
-            string[] files = Directory.GetFiles(WordPath, "*.doc");//找出目錄底下檔案
-            //逐筆刪除
-            foreach (string file in files)
-            {
-                File.Delete(file);
-            }
 
         }
         public class CountNUnit

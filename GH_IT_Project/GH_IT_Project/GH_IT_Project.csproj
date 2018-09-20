@@ -347,7 +347,6 @@
     <Content Include="DatetimePicker\js\bootstrap-datetimepicker.js" />
     <Content Include="DatetimePicker\js\bootstrap-datetimepicker.min.js" />
     <Content Include="DatetimePicker\js\locales\bootstrap-datetimepicker.zh-TW.js" />
-    <Content Include="DownloadForm.asmx" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -505,10 +504,6 @@
     </Compile>
     <Compile Include="Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="DownloadForm.asmx.cs">
-      <DependentUpon>DownloadForm.asmx</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>

@@ -48,7 +48,7 @@ namespace GH_IT_Project
             }
             else
             {
-                Context.Response.Write(js.Serialize("該帳號不存在 count=" + out_result.Count()));//這邊是C# object 轉 json format
+                Context.Response.Write(js.Serialize(out_result));//這邊是C# object 轉 json format
             }
 
             /*測試輸出*/

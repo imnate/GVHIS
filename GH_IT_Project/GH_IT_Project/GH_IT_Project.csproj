@@ -453,6 +453,8 @@
     <Content Include="DataTables\Buttons-1.5.1\css\common.scss" />
     <Content Include="DataTables\Buttons-1.5.1\css\mixins.scss" />
     <Content Include="Download.ashx" />
+    <Content Include="Download_WeekSchedul.ashx" />
+    <Content Include="DownloadYearSchedule.ashx" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -504,6 +506,12 @@
     </Compile>
     <Compile Include="Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadYearSchedule.ashx.cs">
+      <DependentUpon>DownloadYearSchedule.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Download_WeekSchedul.ashx.cs">
+      <DependentUpon>Download_WeekSchedul.ashx</DependentUpon>
     </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>

@@ -137,7 +137,7 @@ namespace GH_IT_Project
 
                 Word.Table Tables;
                 Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                Tables = oDoc.Tables.Add(wrdRng, Count_Number[i].Count + 4, 8, ref Nothing, ref Nothing);
+                Tables = oDoc.Tables.Add(wrdRng, Count_Number[i].Count + 3, 8, ref Nothing, ref Nothing);
                 Tables.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
                 Tables.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
                 Tables.AllowAutoFit = true;
@@ -204,50 +204,50 @@ namespace GH_IT_Project
 
                 Tables.Columns[1].AutoFit();//對某列進行Fitting
                 Tables.Columns[2].AutoFit();
-                Tables.Columns[3].AutoFit();
+                //Tables.Columns[3].AutoFit();
                 Tables.Columns[4].AutoFit();
                 //Tables.Columns[5].AutoFit();
                 Tables.Columns[6].AutoFit();
                 Tables.Columns[7].AutoFit();
 
+                Tables.Cell(Count_Number[i].Count + 2, 1).Merge(Tables.Cell(Count_Number[i].Count + 2, 2));
+                Tables.Cell(Count_Number[i].Count + 2, 2).Merge(Tables.Cell(Count_Number[i].Count + 2, 3));
+                Tables.Cell(Count_Number[i].Count + 2, 3).Merge(Tables.Cell(Count_Number[i].Count + 2, 4));
+
                 Tables.Cell(Count_Number[i].Count + 3, 1).Merge(Tables.Cell(Count_Number[i].Count + 3, 2));
                 Tables.Cell(Count_Number[i].Count + 3, 2).Merge(Tables.Cell(Count_Number[i].Count + 3, 3));
                 Tables.Cell(Count_Number[i].Count + 3, 3).Merge(Tables.Cell(Count_Number[i].Count + 3, 4));
 
-                Tables.Cell(Count_Number[i].Count + 4, 1).Merge(Tables.Cell(Count_Number[i].Count + 4, 2));
-                Tables.Cell(Count_Number[i].Count + 4, 2).Merge(Tables.Cell(Count_Number[i].Count + 4, 3));
-                Tables.Cell(Count_Number[i].Count + 4, 3).Merge(Tables.Cell(Count_Number[i].Count + 4, 4));
 
+                Tables.Cell(Count_Number[i].Count + 2, 1).Range.Text = "管理人";
+                Tables.Cell(Count_Number[i].Count + 2, 1).Range.Font.Name = "標楷體";
+                Tables.Cell(Count_Number[i].Count + 2, 1).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                Tables.Cell(Count_Number[i].Count + 2, 1).Range.Font.Bold = 1;
 
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Text = "管理人";
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Size = 12;
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 1).Range.Font.Bold = 1;
+                Tables.Cell(Count_Number[i].Count + 2, 2).Range.Text = "核派日期";
+                Tables.Cell(Count_Number[i].Count + 2, 2).Range.Font.Name = "標楷體";
+                Tables.Cell(Count_Number[i].Count + 2, 2).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                Tables.Cell(Count_Number[i].Count + 2, 2).Range.Font.Bold = 1;
 
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Text = "核派日期";
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Size = 12;
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 2).Range.Font.Bold = 1;
+                Tables.Cell(Count_Number[i].Count + 2, 3).Range.Text = "申請單位簽名";
+                Tables.Cell(Count_Number[i].Count + 2, 3).Range.Font.Name = "標楷體";
+                Tables.Cell(Count_Number[i].Count + 2, 3).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                Tables.Cell(Count_Number[i].Count + 2, 3).Range.Font.Bold = 1;
 
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Text = "申請單位簽名";
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Size = 12;
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 3).Range.Font.Bold = 1;
+                Tables.Cell(Count_Number[i].Count + 2, 4).Range.Text = "結案日期";
+                Tables.Cell(Count_Number[i].Count + 2, 4).Range.Font.Name = "標楷體";
+                Tables.Cell(Count_Number[i].Count + 2, 4).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                Tables.Cell(Count_Number[i].Count + 2, 4).Range.Font.Bold = 1;
 
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Text = "結案日期";
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Size = 12;
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 4).Range.Font.Bold = 1;
-
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Text = "主管";
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Name = "標楷體";
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Size = 12;
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                Tables.Cell(Count_Number[i].Count + 3, 5).Range.Font.Bold = 1;
+                Tables.Cell(Count_Number[i].Count + 2, 5).Range.Text = "主管";
+                Tables.Cell(Count_Number[i].Count + 2, 5).Range.Font.Name = "標楷體";
+                Tables.Cell(Count_Number[i].Count + 2, 5).Range.Font.Size = 12;
+                Tables.Cell(Count_Number[i].Count + 2, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                Tables.Cell(Count_Number[i].Count + 2, 5).Range.Font.Bold = 1;
 
                 //Tables.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitContent);//全部自動Fitting
                 Tables.Rows.Alignment = Word.WdRowAlignment.wdAlignRowCenter;
@@ -284,8 +284,8 @@ namespace GH_IT_Project
             context.Response.OutputStream.Write(output, 0, output.Length);
             context.Response.Flush();
             context.Response.End();
+
             CloseWINWORD_Porcesses();
-            
             File.Delete(@"C:\Generate_Temp\" + fileName);
 
         }

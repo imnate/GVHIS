@@ -93,7 +93,7 @@
             </ul>
 
             <ul class="list-unstyled CTAs">
-                <li><a id="Admin_Login" href="#" class="download" data-toggle="modal" data-target="#Login_page">Admin Login</a></li>
+                <li><a id="Admin_Login" href="#" class="download" data-toggle="modal" data-target="#Login_page">使用者登入</a></li>
                 <%--<li><a class="article">Back to article</a></li>--%>
             </ul>
             <br>
@@ -137,14 +137,14 @@
                             <span>隱藏工具列</span>
                         </button>
                         <button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#Announce_Modal">
-                            <span>資訊室公告</span>
+                            <span>查看公告</span>
                         </button>
 
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <button id="Login_btn" class="btn btn-warning navbar-btn" type="button" data-toggle="modal" data-target="#Login_page">Login</button></li>
+                                <button id="Login_btn" class="btn btn-warning navbar-btn" type="button" data-toggle="modal" data-target="#Login_page">使用者登入</button></li>
                         </ul>
                     </div>
                 </div>
@@ -274,6 +274,7 @@
 
     <script>
         var global_user;
+        var global_Title;
         $(document).ready(function () {
             $('#Login_submit').on('click', function () {
                 $.ajax({
@@ -282,118 +283,138 @@
                     dataType: "json",
                     data: { account: $('#Loign_Account').val(), psw: $('#Login_psw').val() },
                     success: function (data) {
-                        global_user = data[0].user;
-                        account_user = data[0].user;
-                        account_authority = data[0].authority;
+                        if (data.length != 0) {
+                            global_user = data[0].user;
+                            account_user = data[0].user;
+                            account_authority = data[0].authority;
+                            switch (data[0].authority) {
+                                case "s":
+                                    global_Title = "資訊室";
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text('SuperAdmin');
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text('SuperAdmin');
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    $(management).append(
+                                        '<a href="#management_Submenu" class="text-center" style="font-size:17px;" data-toggle="collapse" aria-expanded="false"><b>管理頁面</b></a>' +
+                                        '<ul class="collapse list-unstyled text-center" id="management_Submenu">' +
+                                        '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#IT_management_Modal" id ="IT_management" href="#"><i class="fas fa-lock-open"></i>  資訊室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#PersonnelRoom_management_Modal" id="PersonnelRoom_management" href="#"><i class="fas fa-lock-open"></i>  人事室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#Account_management_Modal" id="Account_management" href="#"><i class="fas fa-lock-open"></i>  使用者管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#IT_Announcement_management_Modal" id="IT_Announcement_management" href="#"><i class="fas fa-lock-open"></i>  公告板管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#Databse_statistic_Modal" onclick="charts()" id="Databse_statistic" href="#"><i class="fas fa-chart-bar"></i>  資料庫統計</a></li>' +
+                                        '</ul>'
+                                    );
+                                    Load_Secretary_ManageDatatable();
+                                    Load_IT_ManageDatetable();
+                                    Load_Pulmber_ManageDatatable();
+                                    Load_PR_Datatable();
+                                    Load_Account_ManageDatatable();
+                                    Load_ITAnnounce_ManageDatatable();
+                                    break;
+                                case "1"://水電
+                                    global_Title = "水電班";
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text('水電班(' + data[0].user + ')');
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text('水電班(' + data[0].user + ')');
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    $(management).append(
+                                        '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
+                                        '<ul class="collapse list-unstyled" id="management_Submenu">' +
+                                        '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#IT_Announcement_management_Modal" id="IT_Announcement_management" href="#"><i class="fas fa-lock-open"></i>  公告板管理</a></li>' +
+                                        '</ul>'
+                                    );
+                                    Load_Pulmber_ManageDatatable();
+                                    Load_ITAnnounce_ManageDatatable();
+                                    break;
+                                case "2"://秘書
+                                    global_Title = "秘書室";
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text('秘書室(' + data[0].user + ')');
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text('秘書室(' + data[0].user + ')');
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    $(management).append(
+                                        '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
+                                        '<ul class="collapse list-unstyled" id="management_Submenu">' +
+                                        '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#IT_Announcement_management_Modal" id="IT_Announcement_management" href="#"><i class="fas fa-lock-open"></i>  公告板管理</a></li>' +
+                                        '</ul>'
+                                    );
+                                    Load_Secretary_ManageDatatable();
+                                    Load_ITAnnounce_ManageDatatable();
+                                    break;
+                                case "3"://資訊室(非超級管理者)
+                                    global_Title = "資訊室";
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text('資訊室(' + data[0].user + ')');
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text('資訊室(' + data[0].user + ')');
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    $(management).append(
+                                        '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
+                                        '<ul class="collapse list-unstyled" id="management_Submenu">' +
+                                        '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#IT_management_Modal" id ="IT_management" href="#"><i class="fas fa-lock-open"></i>  資訊室管理</a></li>' +
+                                        '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
+                                        '</ul>'
+                                    );
+                                    Load_Secretary_ManageDatatable();
+                                    Load_IT_ManageDatetable();
+                                    Load_Pulmber_ManageDatatable();
+                                    break;
+                                case "4"://堂隊
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text(data[0].user);
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text(data[0].user);
+                                    $(plumber_Submenu).append(
+                                        '<li><a data-toggle="modal" data-target="#Plumber_Acceptance_Modal" id="Plumber_Acceptance" onclick="" href="#"><i class="fas fa-clipboard-check"></i>  水電維修確認</a></li>'
+                                    );
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    Load_Acceptance_DataTable();
+                                    break;
+                                case "5"://人事室
+                                    global_Title = "人事室";
+                                    $(Admin_Login).removeAttr('href data-target');
+                                    $(Admin_Login).text(data[0].user);
+                                    $(Login_btn).attr('disabled', true);
+                                    $(Login_btn).text(data[0].user);
+                                    $(plumber_Submenu).append(
+                                        '<li><a data-toggle="modal" data-target="#Plumber_Acceptance_Modal" id="Plumber_Acceptance" onclick="" href="#"><i class="fas fa-clipboard-check"></i>  水電維修確認</a></li>'
+                                    );
+                                    $(management).append(
+                                        '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
+                                        '<ul class="collapse list-unstyled" id="management_Submenu">' +
+                                        '<li><a data-toggle="modal" data-target="#PersonnelRoom_management_Modal" id="PersonnelRoom_management" href="#"><i class="fas fa-lock-open"></i>  人事室管理</a></li>' +
+                                        '</ul>'
+                                    );
+                                    console.log("權限: " + data[0].authority);
+                                    $('#Login_page').modal('hide');
+                                    Load_PR_Datatable();
+                                    Load_Acceptance_DataTable();
+                                    break;
 
-                        switch (data[0].authority) {
-                            case "s":
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text('SuperAdmin');
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text('SuperAdmin');
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                $(management).append(
-                                    '<a href="#management_Submenu" class="text-center" style="font-size:17px;" data-toggle="collapse" aria-expanded="false"><b>管理頁面</b></a>' +
-                                    '<ul class="collapse list-unstyled text-center" id="management_Submenu">' +
-                                    '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#IT_management_Modal" id ="IT_management" href="#"><i class="fas fa-lock-open"></i>  資訊室管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#PersonnelRoom_management_Modal" id="PersonnelRoom_management" href="#"><i class="fas fa-lock-open"></i>  人事室管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#Account_management_Modal" id="Account_management" href="#"><i class="fas fa-lock-open"></i>  使用者管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#IT_Announcement_management_Modal" id="IT_Announcement_management" href="#"><i class="fas fa-lock-open"></i>  公告板管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#Databse_statistic_Modal" onclick="charts()" id="Databse_statistic" href="#"><i class="fas fa-chart-bar"></i>  資料庫統計</a></li>' +
-                                    '</ul>'
-                                );
-                                Load_Secretary_ManageDatatable();
-                                Load_IT_ManageDatetable();
-                                Load_Pulmber_ManageDatatable();
-                                Load_PR_Datatable();
-                                Load_Account_ManageDatatable();
-                                Load_ITAnnounce_ManageDatatable();
-                                break;
-                            case "1"://水電
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text('水電班(' + data[0].user + ')');
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text('水電班(' + data[0].user + ')');
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                $(management).append(
-                                    '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
-                                    '<ul class="collapse list-unstyled" id="management_Submenu">' +
-                                    '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
-                                    '</ul>'
-                                );
-                                Load_Pulmber_ManageDatatable();
-                                break;
-                            case "2"://秘書
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text('秘書室(' + data[0].user + ')');
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text('秘書室(' + data[0].user + ')');
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                $(management).append(
-                                    '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
-                                    '<ul class="collapse list-unstyled" id="management_Submenu">' +
-                                    '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
-                                    '</ul>'
-                                );
-                                Load_Secretary_ManageDatatable();
-                                break;
-                            case "3"://資訊室(非超級管理者)
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text('資訊室(' + data[0].user + ')');
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text('資訊室(' + data[0].user + ')');
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                $(management).append(
-                                    '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
-                                    '<ul class="collapse list-unstyled" id="management_Submenu">' +
-                                    '<li><a data-toggle="modal" data-target="#Secretary_management_Modal" id="Secretary_management" href="#"><i class="fas fa-lock-open"></i>  秘書室管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#IT_management_Modal" id ="IT_management" href="#"><i class="fas fa-lock-open"></i>  資訊室管理</a></li>' +
-                                    '<li><a data-toggle="modal" data-target="#Pulmber_management_Modal" id="Plumber_management" href="#"><i class="fas fa-lock-open"></i>  水電班管理</a></li>' +
-                                    '</ul>'
-                                );
-                                Load_Secretary_ManageDatatable();
-                                Load_IT_ManageDatetable();
-                                Load_Pulmber_ManageDatatable();
-                                break;
-                            case "4"://堂隊
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text(data[0].user);
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text(data[0].user);
-                                $(plumber_Submenu).append(
-                                    '<li><a data-toggle="modal" data-target="#Plumber_Acceptance_Modal" id="Plumber_Acceptance" onclick="" href="#"><i class="fas fa-clipboard-check"></i>  水電維修確認</a></li>'
-                                );
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                Load_Acceptance_DataTable();
-                                break;
-                            case "5"://人事室
-                                $(Admin_Login).removeAttr('href data-target');
-                                $(Admin_Login).text(data[0].user);
-                                $(Login_btn).attr('disabled', true);
-                                $(Login_btn).text(data[0].user);
-                                $(plumber_Submenu).append(
-                                    '<li><a data-toggle="modal" data-target="#Plumber_Acceptance_Modal" id="Plumber_Acceptance" onclick="" href="#"><i class="fas fa-clipboard-check"></i>  水電維修確認</a></li>'
-                                );
-                                $(management).append(
-                                    '<a href="#management_Submenu" class="text-center" data-toggle="collapse" aria-expanded="false">管理頁面</a>' +
-                                    '<ul class="collapse list-unstyled" id="management_Submenu">' +
-                                    '<li><a data-toggle="modal" data-target="#PersonnelRoom_management_Modal" id="PersonnelRoom_management" href="#"><i class="fas fa-lock-open"></i>  人事室管理</a></li>' +
-                                    '</ul>'
-                                );
-                                console.log("權限: " + data[0].authority);
-                                $('#Login_page').modal('hide');
-                                Load_PR_Datatable();
-                                Load_Acceptance_DataTable();
-                                break;
-
+                            }
+                        }
+                        else {
+                            swal({
+                                title: "帳號或密碼錯誤",
+                                text: "請確認帳號或密碼再行輸入",
+                                type: "warning",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "確定",
+                                closeOnConfirm: false
+                            });
                         }
                     },
                     error: function (err) { },
@@ -728,18 +749,20 @@
                 <div class="row">
                     <div class="col-md-3" style="text-align: center">
                         <button type="button" id="Feedback_MsgBoard" class="btn btn-info" data-toggle="modal" data-target="#Ss_MessageBoard_Modal">查看留言</button>
-                        <button type="button" id="Download_Form" class="btn btn-primary" data-toggle="modal" data-target="#Ss_DownloadForm_Modal">下載表格</button>
+                        <button type="button" id="Download_Week_Form" onclick = "Generator_WeekScehdule_Form()" class="btn btn-primary" disabled>下載週表</button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="text-align: right">
                         <div class="text-center input-group date" id="Secretary_management_picker" data-date="">
                             <input class="form-control" id="SM_date_picker_input" placeholder="請選擇查詢日期" size="16" type="text" value="" readonly>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <button type="button" id="SM_newSs_search" class="btn btn-success">搜尋</button>
+                    <div class="col-md-3" style="text-align: left">
+                        <button type="button" id="SM_newSs_search" class="btn btn-success">搜尋</button>  
+                        <button type="button" id="Download_Year_Form" onclick = "Generator_YearScehdule_Form()" class="btn btn-warning" disabled>下載年表</button>
                     </div>
+
                 </div>
                 <div class="modal-body">
                     <table id="Secretary_management_DataTable" class="display responsive nowrap dataTable no-footer dtr-inline collapsed" style="width: 100%">
@@ -797,7 +820,7 @@
             <div class="modal-content">
                 <div style="padding: 35px 50px; background-color: #5cb85c;">
                     <button type="button" id="Announce_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
-                    <h4 style="background-color: #5cb85c;"><span class="glyphicon glyphicon-copy"></span>資訊室公告</h4>
+                    <h4 style="background-color: #5cb85c;"><span class="glyphicon glyphicon-copy"></span>公告</h4>
                 </div>
                 <br />
                 <div class="modal-body">
@@ -1874,7 +1897,7 @@
                 success: function (data) {
                     $.confirm({
                         icon: 'far fa-user',
-                        title: '資訊室公告',
+                        title: '公告',
                         content:
                         '<form action="" class="formName">' +
                         '<div class="form-group">' +
@@ -2111,7 +2134,7 @@
                                     method: "post",
                                     dataType: "json",
                                     data: {
-                                        Title: edit_Announcement_Title,
+                                        Title: "[" + global_Title  + "]" + edit_Announcement_Title,
                                         Info: edit_Announcement_Info,
                                     },
                                     success: function (data) {
@@ -3425,7 +3448,7 @@
             <div class="modal-content">
                 <div style="padding: 35px 50px; background-color: #32b79c;">
                     <button type="button" id="PersonnelRoom_management_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
-                    <h4 style="background-color: #32b79c;"><span class="glyphicon glyphicon-copy"></span>組室主管、堂隊長出勤狀況</h4>
+                    <h4 style="background-color: #32b79c;"><span class="glyphicon glyphicon-copy"></span>新增組室主管、堂隊長出勤狀況</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -3592,7 +3615,7 @@
                         "sProcessing": "處理中...",
                         "sLengthMenu": "顯示 _MENU_ 筆記錄",
                         "sZeroRecords": "無符合資料",
-                        "sInfo": "帳號筆數：_TOTAL_",
+                        "sInfo": "總筆數：_TOTAL_",
                         "sInfoEmpty": "無任何資料",
                         "sInfoFiltered": "(過濾總筆數 _MAX_)",
                         "sInfoPostFix": "",
@@ -4026,7 +4049,7 @@
                                                     confirmButtonClass: "btn-danger",
                                                     confirmButtonText: "確定",
                                                     closeOnConfirm: false
-                                                })
+                                                });
                                             }
                                         },
                                         error: function (err) { }
@@ -4998,6 +5021,58 @@
 
                     });
                 });
+            }
+            function Generator_WeekScehdule_Form() {
+                if ($('#SM_date_picker_input').val().length >0){
+                    var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
+                    var list = [$(ResultTable).html()];
+                    var jsonText = JSON.stringify({ list: list });
+                    //檔案下載網址
+                    var url = "/Download_WeekSchedul.ashx";
+
+                    //產生 form
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = url;
+
+                    //如果想要另開視窗可加上target
+                    //form.target = "_blank";
+                    //index為要下載的檔案編號，存入hidden跟表單一起送出
+
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "Parameter";
+                    input.value = c;
+                    form.appendChild(input);
+
+                    //送出表單並移除 form
+                    var body = document.getElementsByTagName("body")[0];
+                    body.appendChild(form);
+                    form.submit();
+                    form.remove();
+                }
+                else
+                {
+                    $.confirm({
+                        icon: 'far fa-check-circle',
+                        title: '錯誤',
+                        content: '請選擇當(週)其中一天日期',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-red',
+
+                            },
+                        }
+                    });
+                }
+            }
+            function Generator_YearScehdule_Form() {
+
+
+
             }
             function Generator_FormOnClick() {
                 var c = [];

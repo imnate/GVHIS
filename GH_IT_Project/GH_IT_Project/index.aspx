@@ -749,7 +749,7 @@
                 <div class="row">
                     <div class="col-md-3" style="text-align: center">
                         <button type="button" id="Feedback_MsgBoard" class="btn btn-info" data-toggle="modal" data-target="#Ss_MessageBoard_Modal">查看留言</button>
-                        <button type="button" id="Download_Week_Form" onclick = "Generator_WeekScehdule_Form()" class="btn btn-primary" disabled>下載週表</button>
+                        <button type="button" id="Download_Week_Form" onclick = "Generator_WeekScehdule_Form()" class="btn btn-primary">下載週表</button>
                     </div>
                     <div class="col-md-6" style="text-align: right">
                         <div class="text-center input-group date" id="Secretary_management_picker" data-date="">
@@ -2684,8 +2684,8 @@
                         <thead>
                             <tr style="text-align: left;">
                                 <th>單位</th>
-                                <th>報修人</th>
                                 <th>報修項目</th>
+                                <th>報修人</th>
                                 <th>備註</th>
                                 <th>報修時間</th>
                                 <th>受理狀態</th>
@@ -2694,8 +2694,8 @@
                         <tfoot>
                             <tr style="text-align: left;">
                                 <th>單位</th>
-                                <th>報修人</th>
                                 <th>報修項目</th>
+                                <th>報修人</th>
                                 <th>備註</th>
                                 <th>報修時間</th>
                                 <th>受理狀態</th>
@@ -5042,7 +5042,7 @@
                     var input = document.createElement("input");
                     input.type = "hidden";
                     input.name = "Parameter";
-                    input.value = c;
+                    input.value = $('#SM_date_picker_input').val();
                     form.appendChild(input);
 
                     //送出表單並移除 form

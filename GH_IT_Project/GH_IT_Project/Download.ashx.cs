@@ -121,8 +121,8 @@ namespace GH_IT_Project
             {
                 int count = 1;
                 oDoc.Application.Visible = false;
-                oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;
-                dynamic oRange = oDoc.Content.Application.Selection.Range;//橫向
+                oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;//橫向
+                dynamic oRange = oDoc.Content.Application.Selection.Range;
 
 
 
@@ -286,7 +286,7 @@ namespace GH_IT_Project
             context.Response.End();
 
             CloseWINWORD_Porcesses();
-            File.Delete(@"C:\Generate_Temp\" + fileName);
+            //File.Delete(@"C:\Generate_Temp\" + fileName);
 
         }
         private void CloseWINWORD_Porcesses()

@@ -201,6 +201,44 @@ namespace GH_IT_Project
             Context.Response.Write(js.Serialize(list));
         }
         [WebMethod]
+        public void Schedule_searchByYear(string Year)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string SysYear = DateTime.Now.Year.ToString();
+            List<DeletBigEvent> List_DBE = new List<DeletBigEvent>();
+            DeletBigEvent DBE = new DeletBigEvent();
+            DBE.Output = "系統年份:" + SysYear + ",刪除年份:" + Year;
+            if (Year != SysYear)
+            {
+                
+                MongoDB_connection MDBC = new MongoDB_connection();
+                var database = MDBC.MongoDB("Schedule_table");
+                var collection_out = database.GetCollection<Schedule_table>("Schedule_table");
+
+                var list = new List<Schedule_table>();
+                list = collection_out.Find(x => x.S_time.Contains(Year)).ToList();
+
+                DBE.ToFYear = true;
+                DBE.Count = list.Count;
+                List_DBE.Add(DBE);
+                
+            }
+            else
+            {
+                DBE.ToFYear = false;
+                DBE.Count = 0;
+                List_DBE.Add(DBE);
+                
+            }
+            Context.Response.Write(js.Serialize(List_DBE));
+        }
+        public class DeletBigEvent
+        {
+            public bool ToFYear { get; set; }
+            public int Count { get; set; }
+            public string Output { get; set; }
+        }
+        [WebMethod]
         public void Schedule_update(string ID, string time, string end_time, string Work_item, string local, string host, string Participants, string Duty, string status)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -489,7 +527,7 @@ namespace GH_IT_Project
 
 
             Dictionary<string, bool> TimeStatus = new Dictionary<string, bool>(); //未更新間隔的Dictionary
-            for (int i = 8; i < 17; i++) //初始化8點到17點 每五分鐘建立一個dic欄位
+            for (int i = 6; i < 17; i++) //初始化6點到17點 每五分鐘建立一個dic欄位
             {
                 for (int j = 0; j < 60; j = j + 5)
                 {
@@ -714,6 +752,27 @@ namespace GH_IT_Project
             string filter = "{'_id':ObjectId(" + '"' + list[0].Id.ToString() + '"' + ")}";
             collection_out.DeleteOne(filter);
             Context.Response.Write(js.Serialize(list[0].S_time + " " + list[0].Work_item));
+        }
+        [WebMethod]
+        public void DeletebyYear(string Year)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            MongoDB_connection MDBC = new MongoDB_connection();
+            var database = MDBC.MongoDB("Schedule_table");
+            var collection_out = database.GetCollection<Schedule_table>("Schedule_table");
+            var list = new List<Schedule_table>();
+            list = collection_out.Find(x => x.S_time.Contains(Year)).ToList()
+                .Select(s => new Schedule_table
+                {
+                    Id = s.Id,
+                })
+                .ToList();
+            for (int i = 0; i < list.Count; i++)
+            {
+                string filter = "{'_id':ObjectId(" + '"' + list[i].Id.ToString() + '"' + ")}";
+                collection_out.DeleteOne(filter);
+            }
+            Context.Response.Write(js.Serialize(list.Count));
         }
 
         public string convert_no0hour(string hour)

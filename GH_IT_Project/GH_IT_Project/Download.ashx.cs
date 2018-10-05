@@ -120,7 +120,7 @@ namespace GH_IT_Project
             for (int i = 0; i < Count_Number.Count; i++)
             {
                 int count = 1;
-                oDoc.Application.Visible = false;
+                oDoc.Application.Visible = false;//不顯示word視窗
                 oDoc.PageSetup.Orientation = Word.WdOrientation.wdOrientLandscape;//橫向
                 dynamic oRange = oDoc.Content.Application.Selection.Range;
 

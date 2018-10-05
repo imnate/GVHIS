@@ -426,7 +426,7 @@
     </script>
     <script>    
         function FeedBackMessageNum() {
-            Ss_Msg_Board.ajax.reload();
+            $(Ss_MessageBoard_Modal).ajax.reload();
             //執行ajax進行抓取未回覆留言數量，並且刪除兩個月以前的留言
             $.ajax({
                 url: "FeedBackMsgNum.asmx/FeedBackMsg",
@@ -438,7 +438,7 @@
                     console.log("FeedBackMsgNum" + data);
                     if (data > 0) {
                         $.confirm({
-                            icon: 'fas fa-comment',
+                            icon: 'fas fa-check',
                             title: '提醒',
                             content: '有 ' + data + ' 筆 留言未回覆，請立即前往並且回覆。',
                             type: 'orange',
@@ -685,8 +685,8 @@
                 },
                 success: function (data) {
                     $.confirm({
-                        icon: 'fas fa-comment',
-                        title: '詳細',
+                        icon: 'far fa-user',
+                        title: '詳情',
                         content:
                         '<form action="" class="formName">' +
                         '<div class="form-group">' +
@@ -711,65 +711,47 @@
                         '<textarea rows="5" class="edit_MessageDetail_Feedback form-control" placeholder="例如:閱">' + data[0].feedback + '</textarea>' +
                         '</div>' +
                         '</form>',
-                        type: 'orange',
-                        //typeAnimated: true,
+
+                        type: 'yellow',
+                        typeAnimated: true,
                         buttons: {
                             submit: {
                                 text: '回覆',
                                 btnClass: 'btn-blue',
                                 action: function () {
-                                    if (this.$content.find('.edit_MessageDetail_Feedback').val().length > 0) {
-                                        var ID = data[0].strId;
-                                        var Feedback = this.$content.find('.edit_MessageDetail_Feedback').val();
-                                        $.ajax({
-                                            url: "MsgBoard.asmx/Msg_updateFeedback",
-                                            method: "post",
-                                            dataType: "json",
-                                            data: {
-                                                ID: ID,
-                                                info: Feedback
-                                            },
-                                            success: function (data) {
-                                                Ss_Msg_Board.ajax.reload();
-                                                $.confirm({
-                                                    icon: 'fas fa-check',
-                                                    title: '成功',
-                                                    content: '回覆成功',
-                                                    type: 'orange',
-                                                    typeAnimated: true,
-                                                    buttons: {
-                                                        tryAgain: {
-                                                            text: '返回',
-                                                            btnClass: 'btn-green',
-                                                            action: function () {
-                                                            }
-                                                        },
-                                                    }
-                                                });
-                                            },
-                                            error: function (err) {
+                                    var ID = data[0].strId;
+                                    var Feedback = this.$content.find('.edit_MessageDetail_Feedback').val();
+                                    $.ajax({
+                                        url: "MsgBoard.asmx/Msg_updateFeedback",
+                                        method: "post",
+                                        dataType: "json",
+                                        data: {
+                                            ID: ID,
+                                            info: Feedback
+                                        },
+                                        success: function (data) {
+                                            Ss_Msg_Board.ajax.reload();
+                                            $.confirm({
+                                                icon: 'fas fa-check',
+                                                title: '成功',
+                                                content: '回覆成功',
+                                                type: 'orange',
+                                                typeAnimated: true,
+                                                buttons: {
+                                                    tryAgain: {
+                                                        text: '返回',
+                                                        btnClass: 'btn-green',
+                                                        action: function () {
+                                                        }
+                                                    },
+                                                }
+                                            });
+                                        },
+                                        error: function (err) {
 
-                                            },
+                                        },
 
-                                        });
-                                    }
-                                    else {
-                                        $.confirm({
-                                            icon: 'fas fa-check',
-                                            title: '錯誤',
-                                            content: '請在回覆欄位輸入字元',
-                                            type: 'red',
-                                            typeAnimated: true,
-                                            buttons: {
-                                                tryAgain: {
-                                                    text: '返回',
-                                                    btnClass: 'btn-green',
-                                                    action: function () {
-                                                    }
-                                                },
-                                            }
-                                        });
-                                    }
+                                    });
                                 }
                             },
                             back: {
@@ -820,8 +802,6 @@
                     <div class="col-md-3" style="text-align: left">
                         <button type="button" id="SM_newSs_search" class="btn btn-success">搜尋</button>
                         <button type="button" id="Download_Year_Form" onclick="Generator_LeadersBigEvent_Form()" class="btn btn-danger">下載大事記</button>
-                        <button type="button" class="btn btn-danger" onclick="DeleteOldData()"><i class="far fa-calendar-times"></i></button>
-
                     </div>
 
                 </div>
@@ -857,195 +837,10 @@
             </div>
         </div>
     </div>
-    <script>    
-        function DeleteOldData() {
-            $.confirm({
-                icon: 'far fa-user',
-                title: '登入此權限刪除舊資料',
-                content:
-                '<form action="" class="formName">' +
-                '<div class="form-group">' +
-                '<label>帳號:</label>' +
-                '<input type="text" maxlength="15" class="edit_AuthAccount form-control">' +
-                '</div>' +
-                '<label>密碼:</label>' +
-                '<input type="Password" maxlength="15" class="edit_AuthPassword form-control">' +
-                '</div>' +
-                '</form>',
-
-                type: 'green',
-                typeAnimated: true,
-                buttons: {
-                    formSubmit: {
-                        text: '確定',
-                        btnClass: 'btn-green',
-                        action: function () {
-                            var Account = this.$content.find('.edit_AuthAccount').val();
-                            var Password = this.$content.find('.edit_AuthPassword').val();
-                            if (Account.length != 0 && Password.length != 0) {
-                                $.ajax({
-                                    url: "Login_ajax.asmx/Login_admin",
-                                    method: "post",
-                                    dataType: "json",
-                                    data: {
-                                        account: Account,
-                                        psw: Password,
-
-                                    },
-                                    success: function (data) {
-                                        console.log(data[0].authority);
-                                        switch (data[0].authority) {
-                                            case "s":
-                                                DeleteOlderBigEvent();
-                                                break;
-                                            case "2":
-                                                DeleteOlderBigEvent();
-                                                break;
-                                        }
-                                    },
-                                    error: function (err) { }
-
-                                });
-
-                            }
-                            else {
-                                //顯示錯誤訊息
-                                $.alert("欄位空白");
-                                return false;
-                            }
-
-                        }
-                    },
-                    tryAgain: {
-                        text: '取消',
-                        btnClass: 'btn-blue',
-                        action: function () {
-                        }
-                    },
-                },
-                onContentReady: function () {//這不加不會繼續跑ajax因為先被 return false住了
-                    // bind to events
-                    var jc = this;
-                    this.$content.find('form').on('submit', function (e) {
-                        // if the user submits the form by pressing enter in the field.
-                        e.preventDefault();
-                        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                    });
-                }
-            });
-
-
-        }
-
-    </script>
     <!--管理每月工作表 Modal -->
-    <script>    
-        function DeleteOlderBigEvent() {
-            $.confirm({
-                icon: 'fas fa-exclamation-triangle',
-                title: '輸入刪除的年份',
-                content: '<form action="" class="formName">' +
-                '<div class="form-group">' +
-                '<label>刪除年份(西元):</label>' +
-                '<input type="text" class="DeleteOldBigEventYear form-control" placeholder="例如:2018">' +
-                '</div>' +
-                '</form>',
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    correct: {
-                        text: '確定',
-                        btnClass: 'btn-green',
-                        action: function () {
-                            //do ajax 找資料庫
-                            var DeleteOldBigEventYear = this.$content.find('.DeleteOldBigEventYear').val();
-                                $.ajax({
-                                    url: "SearchNew_schedule.asmx/Schedule_searchByYear",
-                                    method: "post",
-                                    dataType: "json",
-                                    data: {
-                                        Year: DeleteOldBigEventYear
-                                    },
-                                    success: function (data) {
-                                        console.log("DeleteOldBigEventYear :" + DeleteOldBigEventYear + "ToF :" + data[0].ToFYear + " listCount " + data[0].Count + " Output :" + data[0].Output);
-                                        if (data[0].ToFYear == true && data[0].Count>0) {//DO DELETE
-                                            $.confirm({
-                                                icon: 'fas fa-exclamation-triangle',
-                                                title: '確認刪除?',
-                                                content: '刪除年份: ' + DeleteOldBigEventYear + '<br>' +
-                                                '資料庫資料筆數: ' + data[0].Count + '筆',
-                                                type: 'orange',
-                                                typeAnimated: true,
-                                                buttons: {
-                                                    Delete: {
-                                                        text: '確定刪除',
-                                                        btnClass: 'btn-red',
-                                                        action: function () {
-                                                            $.ajax({
-                                                                url: "SearchNew_schedule.asmx/DeletebyYear",
-                                                                method: "post",
-                                                                dataType: "json",
-                                                                data: {
-                                                                    Year: DeleteOldBigEventYear,
-                                                                },
-                                                                success: function (data) {
-                                                                    swal({
-                                                                        title: "成功刪除!",
-                                                                        text: '刪除了' + data + '筆' + DeleteOldBigEventYear+'資料',
-                                                                        type: "success",
-                                                                        showCancelButton: true,
-                                                                        confirmButtonClass: "btn-success",
-                                                                        confirmButtonText: "確定",
-                                                                        cancelButtonText: "取消",
-                                                                        closeOnConfirm: false
-                                                                    });
-                                                                },
-                                                                error: function (err) { }
-                                                            })
-                                                        }
-                                                    },
-                                                }
-                                            });
-                                        }
-                                        else {//資料庫沒有搜尋到資料
-                                            $.confirm({
-                                                icon: 'fas fa-exclamation-triangle',
-                                                title: '錯誤',
-                                                content: '年份:' + DeleteOldBigEventYear + '<br>資料庫資料筆數: ' + data[0].Count + '筆<br>搜尋不到任何資料，或刪除年份還未准許刪除!<br>(只允許刪除去年的資料)',
-                                                type: 'red',
-                                                typeAnimated: true,
-                                                buttons: {
-                                                    Exit: {
-                                                        text: '離開',
-                                                        btnClass: 'btn-green',
-                                                        action: function () {
-                                                        }
-                                                    },
-                                                }
-                                            });
-
-
-                                        }
-                                    },
-                                    error: function (err) {
-                                        console.log(err);
-                                    }
-                                });
-                        }
-                    },
-                    check_Msg: {
-                        text: '取消',
-                        btnClass: 'btn-info',
-                        action: function () {
-
-                        }
-                    },
-                }
-            });
-        }
-    </script>
     <script>
         $(document).ready(function () {
+
             setTimeout(function () {
                 $('body').addClass('loaded');
                 $('h1').css('color', '#222222');
@@ -1061,8 +856,6 @@
         });
 
     </script>--%>
-
-
     <div id="Announce_Modal" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -2079,7 +1872,7 @@
                     else
                         Message_result = data[0].message;
                     $.confirm({
-                        icon: 'fas fa-comment',
+                        icon: 'far fa-user',
                         title: '詳情',
                         content:
                         '<form action="" class="formName">' +
@@ -2101,6 +1894,7 @@
                         '<textarea rows="5" readonly class="form-control" >' + Message_result + '</textarea>' +
                         '</div>' +
                         '</form>',
+
                         type: 'green',
                         typeAnimated: true,
                         buttons: {
@@ -2511,7 +2305,7 @@
 
         $(document).on('click', '#new_Message', function () {
             $.confirm({
-                icon: 'fas fa-comment',
+                icon: 'far fa-user',
                 title: '我要留言',
                 content:
                 '<form action="" class="formName">' +
@@ -2860,16 +2654,16 @@
 
     </script>
     <script>
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
-        });
-        $(document).ready(function () {
-            $('#Ss_btn').on('click', function () {
-                $('#Ss_btn').text();
-            });
-        });
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+                 });
+             });
+             $(document).ready(function () {
+                 $('#Ss_btn').on('click', function () {
+                     $('#Ss_btn').text();
+                 });
+             });
     </script>
 
     <%-- 以上為側邊攔side bar --%>
@@ -3035,35 +2829,35 @@
 
     </script>
     <script>
-             function IT_remark(data) {
-                 $.ajax({
-                     url: "IT_table_viewer.asmx/IT_table_Search",
-                     method: "post",
-                     dataType: "json",
-                     data: {
-                         ID: data,
-                     },
-                     success: function (data) {
-                         $.confirm({
-                             icon: 'far fa-check-circle',
-                             title: '備註',
-                             content: '<div>' + data[0].remark + '</div>',
-                             type: 'green',
-                             typeAnimated: true,
-                             buttons: {
-                                 close: {
-                                     text: '確定',
-                                     btnClass: 'btn-green',
-                                     action: function () {
+        function IT_remark(data) {
+            $.ajax({
+                url: "IT_table_viewer.asmx/IT_table_Search",
+                method: "post",
+                dataType: "json",
+                data: {
+                    ID: data,
+                },
+                success: function (data) {
+                    $.confirm({
+                        icon: 'far fa-check-circle',
+                        title: '備註',
+                        content: '<div>' + data[0].remark + '</div>',
+                        type: 'green',
+                        typeAnimated: true,
+                        buttons: {
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-green',
+                                action: function () {
 
-                                     }
-                                 },
-                             }
-                         });
-                     },
-                     error: function (err) { }
-                 })
-             }
+                                }
+                            },
+                        }
+                    });
+                },
+                error: function (err) { }
+            })
+        }
     </script>
     <div id="IT_DataTable_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
         <div class="modal-dialog modal-lg" role="document">
@@ -3454,7 +3248,6 @@
             });
         }
         function insert_schedule() {//行程寫入AJAX
-            console.log('行程時間: ' + $(new_Ss_dateAndtime_input).val());
             $.ajax({
                 url: "Schedule.asmx/Schedule_table_insert",
                 method: "post",
@@ -3469,7 +3262,6 @@
                     Duty: $(new_Ss_Modal_duty).val(),
                 },
                 success: function (data) {
-                    console.log('data' + data);
                     switch (data[0].outcase) {
                         case 1:
                             console.log('進入case1');
@@ -3482,7 +3274,7 @@
                                 '</div>' +
                                 '<H3 style="text-align: center;"><span style="font-weight:bold;color:red;">警告</H3>' +
                                 //'<div style="text-align: center; font-weight:bold;"><i class="fas fa-exclamation-circle">警告</i><br></div>' +
-                                '<div style="text-align: center;">因距離新增的行程還剩下 ' + data[0].Days + '天 的時間<br></div>' +
+                                '<div style="text-align: center;">因為新增行程時間距離行程時間太近<br></div>' +
                                 '<div style="text-align: center;">為了避免行程沒有被審核，遵照以下:<br></div>' +
                                 '<div style="text-align: center; font-weight:bold;">' +
                                 '1.立即通知 <span style="text-align: center; text-decoration:underline;color:red;">秘書</span> 告知行程必須立即審核<br>' +
@@ -3661,12 +3453,12 @@
             background-color: #5cb85c;
             color: white !important;
             align: center;
-            font-size: 30px;
+            ont-size: 30px;
         }
 
 
         .modal foote {
-            background-color: #f9f9f9;
+            background-co #f9f9f9;
         }
         /* EN
     </style>
@@ -5067,242 +4859,242 @@
     </div>
 
     <script>
-        var ITMDB;
-        var count_ajax = 0;
-        function Load_IT_ManageDatetable() {
-            $(document).ready(function () {
-                ITMDB = $('#IT_management_DataTable').DataTable({
-                    "serverSide": true, //serverSide打開
-                    "searching": true,
-                    //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                    "ajax": {
-                        "url": "IT_table_viewer.asmx/IT_table",
-                        "type": "GET",
-                        "datatype": "json",
-                        "data": function (d) {
-                            d.search = $('#IT_management_DataTable_filter input').val();
-                        },
-                        "dataSrc": function (json) {
-                            json.draw = json.data.draw;
-                            json.recordsTotal = json.data.iTotalRecords;
-                            json.recordsFiltered = json.data.iTotalDisplayRecords;
-                            return json.data;
-                        }
-
-                    },
-                    "oLanguage": {
-                        "sProcessing": "處理中...",
-                        "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                        "sZeroRecords": "無符合資料",
-                        "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
-                        "sInfoEmpty": "無任何資料",
-                        "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                        "sInfoPostFix": "",
-                        "sSearch": "搜尋",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "首頁",
-                            "sPrevious": "上頁",
-                            "sNext": "下頁",
-                            "sLast": "末頁"
-                        }
-                    },
-                    "columns": [
-                        {
-                            "data": "unit", "name": "unit", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="text-center width:80px">' + data + '</div>'
-                            }
-                        },
-                        {
-                            "data": "reporter", "name": "reporter", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="text-center width:80px">' + data + '</div>'
-                            }
-                        },
-                        {
-                            "data": "report_item", "name": "report_item", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="text-center width:100px">' + data + '</div>'
-                            }
-                        },
-                        {
-                            "data": "date", "name": "date", "autoWidth": true, "orderable": true,
-                            "render": function (data) {
-                                return '<div style="text-center width:80px">' + data + '</div>'
-                            }
-                        },
-                        {
-                            "data": "status", "name": "status", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="text-center width:80px">' + data + '</div>'
-                            }
-                        },
-                        {
-                            "data": "strid", "name": "strid", "autoWidth": true,
-                            "render": function (data) {
-                                return '<a style="width:80px" href="#" onclick="AddEditID_IT(\'' + data + '\')"><i class="fas fa-edit"></i></a>'
-                            }
-
-                        },
-                        //{
-                        //    "data": "remark", "name": "remark", "autoWidth": true,
-                        //    "render": function (data) {
-                        //        return '<div style="text-center width:100px">' + data +'</div>'
-                        //    }
-                        //},
-                    ],
-                    "columnDefs": [
-                        { "className": "dt-center", "targets": "_all" }
-                    ],
-                });
-            });
-        }
-        function AddEditID_IT(data) {
-            console.log("data = " + data);
-            $.ajax({
-                url: "IT_table_viewer.asmx/IT_table_Search",
-                method: "post",
-                dataType: "json",
-                data: {
-                    ID: data,
-                },
-                success: function (data) {
-                    //var date = data[0].date;
-                    console.log("ajax feedback " + data[0].date);
-                    $.confirm({
-                        icon: 'fas fa-clipboard-list',
-                        title: '編輯',
-                        type: 'purple',
-                        typeAnimated: true,
-                        content: '' +
-                        '<form action="" class="formName">' +
-                        '<div class="form-group">' +
-                        '<label>資料庫ID:</label>' +
-                        '<input type="text" disabled class="edit_id form-control" value="' + data[0].strid + '" placeholder="">' +
-                        '<small id="emailHelp" class="form-text text-muted" >' + "[IP:" + data[0].IP + "]" + '</small>' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>回報狀態:</label>' +
-                        '<select class="edit_status_IT form-control" name="category">' +
-                        '<option>' + data[0].status + '</option>' +
-                        '<option>處理完畢</option>' +
-                        '<option>維修中</option>' +
-                        '<option>已委託廠商處理中</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修單位:</label>' +
-                        '<input type="text" disabled class="edit_Unit form-control" value="' + data[0].unit + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>時間:</label>' +
-                        '<input type="text" disabled class="edit_date form-control" value="' + data[0].date + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修人:</label>' +
-                        '<input type="text" disabled class="edit_reporter form-control" value="' + data[0].reporter + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>分機:</label>' +
-                        '<input type="text" disabled class="edit_reporter_phone form-control" value="' + data[0].phone + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修項目:</label>' +
-                        '<input type="text" disabled class="edit_report_item form-control" value="' + data[0].report_item + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>備註:</label>' +
-                        '<textarea rows="4" disabled class="edit_remark form-control" placeholder="">' + data[0].remark + '</textarea>' +
-                        '</div>' +
-                        '</form>',
-                        buttons: {
-                            delete: {
-                                text: '刪除',
-                                btnClass: 'btn-red',
-                                action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    swal({
-                                        title: "刪除確認",
-                                        text: "時間:" + data[0].date + "\n報修單位:" + data[0].unit + "\n報修人:" + data[0].reporter + "\n報修項目:" + data[0].report_item,
-                                        type: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonClass: "btn-danger",
-                                        cancelButtonText: "取消",
-                                        confirmButtonText: "確定",
-                                        closeOnConfirm: true
-                                    },
-                                        function () {
-                                            $.ajax({
-                                                url: "IT_table_viewer.asmx/IT_Delete",
-                                                method: "post",
-                                                dataType: "json",
-                                                data: {
-                                                    ID: edit_ID,
-                                                },
-                                                success: function (data) {
-                                                    console.log("ajax update " + data);
-                                                    ITMDB.ajax.reload();
-                                                    IT_table.ajax.reload();
-                                                },
-                                                error: function (err) {
-
-                                                },
-                                            });
-                                        });
-                                },
+            var ITMDB;
+            var count_ajax = 0;
+            function Load_IT_ManageDatetable() {
+                $(document).ready(function () {
+                    ITMDB = $('#IT_management_DataTable').DataTable({
+                        "serverSide": true, //serverSide打開
+                        "searching": true,
+                        //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                        "ajax": {
+                            "url": "IT_table_viewer.asmx/IT_table",
+                            "type": "GET",
+                            "datatype": "json",
+                            "data": function (d) {
+                                d.search = $('#IT_management_DataTable_filter input').val();
                             },
-                            formSubmit: {
-                                text: '更新',
-                                btnClass: 'btn-blue',
-                                action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    var edit_update_status = this.$content.find('.edit_status_IT').val();
-                                    $.ajax({
-                                        url: "IT_table_viewer.asmx/IT_update",
-                                        method: "post",
-                                        dataType: "json",
-                                        data: {
-                                            ID: edit_ID,
-                                            update_status: edit_update_status
-                                        },
-                                        success: function (data) {
-                                            console.log("ajax update " + data);
-                                            ITMDB.ajax.reload();
-                                            IT_table.ajax.reload();
-                                        },
-                                        error: function (err) {
+                            "dataSrc": function (json) {
+                                json.draw = json.data.draw;
+                                json.recordsTotal = json.data.iTotalRecords;
+                                json.recordsFiltered = json.data.iTotalDisplayRecords;
+                                return json.data;
+                            }
 
-                                        },
-
-                                    });
+                        },
+                        "oLanguage": {
+                            "sProcessing": "處理中...",
+                            "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                            "sZeroRecords": "無符合資料",
+                            "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
+                            "sInfoEmpty": "無任何資料",
+                            "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                            "sInfoPostFix": "",
+                            "sSearch": "搜尋",
+                            "sUrl": "",
+                            "oPaginate": {
+                                "sFirst": "首頁",
+                                "sPrevious": "上頁",
+                                "sNext": "下頁",
+                                "sLast": "末頁"
+                            }
+                        },
+                        "columns": [
+                            {
+                                "data": "unit", "name": "unit", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="text-center width:80px">' + data + '</div>'
                                 }
                             },
-                            cancel: {
-                                text: '取消',
-                                action: function () {
+                            {
+                                "data": "reporter", "name": "reporter", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="text-center width:80px">' + data + '</div>'
+                                }
+                            },
+                            {
+                                "data": "report_item", "name": "report_item", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="text-center width:100px">' + data + '</div>'
+                                }
+                            },
+                            {
+                                "data": "date", "name": "date", "autoWidth": true, "orderable": true,
+                                "render": function (data) {
+                                    return '<div style="text-center width:80px">' + data + '</div>'
+                                }
+                            },
+                            {
+                                "data": "status", "name": "status", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="text-center width:80px">' + data + '</div>'
+                                }
+                            },
+                            {
+                                "data": "strid", "name": "strid", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<a style="width:80px" href="#" onclick="AddEditID_IT(\'' + data + '\')"><i class="fas fa-edit"></i></a>'
+                                }
 
-                                    //close
-                                },
-                            }
-                        },
-                        //onContentReady: function () {
-                        //    // bind to events
-                        //    var jc = this;
-                        //    this.$content.find('form').on('submit', function (e) {
-                        //        // if the user submits the form by pressing enter in the field.
-                        //        e.preventDefault();
-                        //        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                        //    });
-                        //}
+                            },
+                            //{
+                            //    "data": "remark", "name": "remark", "autoWidth": true,
+                            //    "render": function (data) {
+                            //        return '<div style="text-center width:100px">' + data +'</div>'
+                            //    }
+                            //},
+                        ],
+                        "columnDefs": [
+                            { "className": "dt-center", "targets": "_all" }
+                        ],
                     });
-                },
-                error: function (err) {
+                });
+            }
+            function AddEditID_IT(data) {
+                console.log("data = " + data);
+                $.ajax({
+                    url: "IT_table_viewer.asmx/IT_table_Search",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        ID: data,
+                    },
+                    success: function (data) {
+                        //var date = data[0].date;
+                        console.log("ajax feedback " + data[0].date);
+                        $.confirm({
+                            icon: 'fas fa-clipboard-list',
+                            title: '編輯',
+                            type: 'purple',
+                            typeAnimated: true,
+                            content: '' +
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>資料庫ID:</label>' +
+                            '<input type="text" disabled class="edit_id form-control" value="' + data[0].strid + '" placeholder="">' +
+                            '<small id="emailHelp" class="form-text text-muted" >' + "[IP:" + data[0].IP + "]" + '</small>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>回報狀態:</label>' +
+                            '<select class="edit_status_IT form-control" name="category">' +
+                            '<option>' + data[0].status + '</option>' +
+                            '<option>處理完畢</option>' +
+                            '<option>維修中</option>' +
+                            '<option>已委託廠商處理中</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修單位:</label>' +
+                            '<input type="text" disabled class="edit_Unit form-control" value="' + data[0].unit + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>時間:</label>' +
+                            '<input type="text" disabled class="edit_date form-control" value="' + data[0].date + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修人:</label>' +
+                            '<input type="text" disabled class="edit_reporter form-control" value="' + data[0].reporter + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>分機:</label>' +
+                            '<input type="text" disabled class="edit_reporter_phone form-control" value="' + data[0].phone + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修項目:</label>' +
+                            '<input type="text" disabled class="edit_report_item form-control" value="' + data[0].report_item + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>備註:</label>' +
+                            '<textarea rows="4" disabled class="edit_remark form-control" placeholder="">' + data[0].remark + '</textarea>' +
+                            '</div>' +
+                            '</form>',
+                            buttons: {
+                                delete: {
+                                    text: '刪除',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        var edit_ID = this.$content.find('.edit_id').val();
+                                        swal({
+                                            title: "刪除確認",
+                                            text: "時間:" + data[0].date + "\n報修單位:" + data[0].unit + "\n報修人:" + data[0].reporter + "\n報修項目:" + data[0].report_item,
+                                            type: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonClass: "btn-danger",
+                                            cancelButtonText: "取消",
+                                            confirmButtonText: "確定",
+                                            closeOnConfirm: true
+                                        },
+                                            function () {
+                                                $.ajax({
+                                                    url: "IT_table_viewer.asmx/IT_Delete",
+                                                    method: "post",
+                                                    dataType: "json",
+                                                    data: {
+                                                        ID: edit_ID,
+                                                    },
+                                                    success: function (data) {
+                                                        console.log("ajax update " + data);
+                                                        ITMDB.ajax.reload();
+                                                        IT_table.ajax.reload();
+                                                    },
+                                                    error: function (err) {
 
-                },
+                                                    },
+                                                });
+                                            });
+                                    },
+                                },
+                                formSubmit: {
+                                    text: '更新',
+                                    btnClass: 'btn-blue',
+                                    action: function () {
+                                        var edit_ID = this.$content.find('.edit_id').val();
+                                        var edit_update_status = this.$content.find('.edit_status_IT').val();
+                                        $.ajax({
+                                            url: "IT_table_viewer.asmx/IT_update",
+                                            method: "post",
+                                            dataType: "json",
+                                            data: {
+                                                ID: edit_ID,
+                                                update_status: edit_update_status
+                                            },
+                                            success: function (data) {
+                                                console.log("ajax update " + data);
+                                                ITMDB.ajax.reload();
+                                                IT_table.ajax.reload();
+                                            },
+                                            error: function (err) {
 
-            });
-        }
+                                            },
+
+                                        });
+                                    }
+                                },
+                                cancel: {
+                                    text: '取消',
+                                    action: function () {
+
+                                        //close
+                                    },
+                                }
+                            },
+                            //onContentReady: function () {
+                            //    // bind to events
+                            //    var jc = this;
+                            //    this.$content.find('form').on('submit', function (e) {
+                            //        // if the user submits the form by pressing enter in the field.
+                            //        e.preventDefault();
+                            //        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                            //    });
+                            //}
+                        });
+                    },
+                    error: function (err) {
+
+                    },
+
+                });
+            }
     </script>
     <div id="Pulmber_management_Modal" class="modal fade bd-example-modal-lg" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="true" style="display: none;">
         <div class="modal-dialog modal-lg" role="document">
@@ -5350,547 +5142,546 @@
     </div>
 
     <script>
-        var PMDB;
-        var count_ajax = 0;
-        function Load_Pulmber_ManageDatatable() {
-            $(document).ready(function () {
-                PMDB = $('#Pulmber_management_DataTable').DataTable({
-                    "serverSide": true, //serverSide打開
-                    "searching": false,
-                    //"dom": '<"top"i>rt<"bottom"lp><"clear">',
-                    "ajax": {
-                        "url": "Plumber_table_viewer.asmx/Plumber_table",
-                        "type": "GET",
-                        "datatype": "json",
-                        "data": function (d) {
-                            //d.search = $('#Pulmber_management_DataTable_filter input').val();
-                            d.search = "";
-                        },
-                        "dataSrc": function (json) {
-                            json.draw = json.data.draw;
-                            json.recordsTotal = json.data.iTotalRecords;
-                            json.recordsFiltered = json.data.iTotalDisplayRecords;
-                            return json.data;
-                        }
+            var PMDB;
+            var count_ajax = 0;
+            function Load_Pulmber_ManageDatatable() {
+                $(document).ready(function () {
+                    PMDB = $('#Pulmber_management_DataTable').DataTable({
+                        "serverSide": true, //serverSide打開
+                        "searching": false,
+                        //"dom": '<"top"i>rt<"bottom"lp><"clear">',
+                        "ajax": {
+                            "url": "Plumber_table_viewer.asmx/Plumber_table",
+                            "type": "GET",
+                            "datatype": "json",
+                            "data": function (d) {
+                                //d.search = $('#Pulmber_management_DataTable_filter input').val();
+                                d.search = "";
+                            },
+                            "dataSrc": function (json) {
+                                json.draw = json.data.draw;
+                                json.recordsTotal = json.data.iTotalRecords;
+                                json.recordsFiltered = json.data.iTotalDisplayRecords;
+                                return json.data;
+                            }
 
-                    },
-                    "oLanguage": {
-                        "sProcessing": "處理中...",
-                        "sLengthMenu": "顯示 _MENU_ 筆記錄",
-                        "sZeroRecords": "無符合資料",
-                        "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
-                        "sInfoEmpty": "無任何資料",
-                        "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
-                        "sInfoPostFix": "",
-                        "sSearch": "搜尋",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "首頁",
-                            "sPrevious": "上頁",
-                            "sNext": "下頁",
-                            "sLast": "末頁"
-                        }
-                    },
-                    "columns": [
-                        {
-                            "data": "Unit", "name": "Unit", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="width:90px;">' + data + "</div>";
+                        },
+                        "oLanguage": {
+                            "sProcessing": "處理中...",
+                            "sLengthMenu": "顯示 _MENU_ 筆記錄",
+                            "sZeroRecords": "無符合資料",
+                            "sInfo": "目前記錄：_START_ 至 _END_, 總筆數：_TOTAL_",
+                            "sInfoEmpty": "無任何資料",
+                            "sInfoFiltered": "(搜尋的總筆數 _MAX_)",
+                            "sInfoPostFix": "",
+                            "sSearch": "搜尋",
+                            "sUrl": "",
+                            "oPaginate": {
+                                "sFirst": "首頁",
+                                "sPrevious": "上頁",
+                                "sNext": "下頁",
+                                "sLast": "末頁"
                             }
                         },
-                        {
-                            "data": "reporter", "name": "reporter", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="width:60px;">' + data + "</div>";
-                            }
-                        },
-                        {
-                            "data": "fix_item", "name": "fix_item", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="width:80px;">' + data + "</div>";
-                            }
-                        },
-                        {
-                            "data": "location", "name": "location", "autoWidth": true,
-                            "render": function (data, type) {
-                                if (type === 'display') {
-                                    if (data.length > 11) {
-                                        var result = data;
-                                        var DataDivsion = (data.length + (data.length / 10) * 4) / 10;
-                                        var c = 0;
-                                        for (var i = 1; i <= DataDivsion; i++) {
-                                            result = i == 1 ? result.substr(0, i * 9 + c * 1) + '<br>' + result.substr(i * 9 + c * 1, result.length) : result.substr(0, i * 9 + c * 4) + '<br>' + result.substr(i * 9 + c * 4, result.length);
-                                            c++;
+                        "columns": [
+                            {
+                                "data": "Unit", "name": "Unit", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="width:90px;">' + data + "</div>";
+                                }
+                            },
+                            {
+                                "data": "reporter", "name": "reporter", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="width:60px;">' + data + "</div>";
+                                }
+                            },
+                            {
+                                "data": "fix_item", "name": "fix_item", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="width:80px;">' + data + "</div>";
+                                }
+                            },
+                            {
+                                "data": "location", "name": "location", "autoWidth": true,
+                                "render": function (data, type) {
+                                    if (type === 'display') {
+                                        if (data.length > 11) {
+                                            var result = data;
+                                            var DataDivsion = (data.length + (data.length / 10) * 4) / 10;
+                                            var c = 0;
+                                            for (var i = 1; i <= DataDivsion; i++) {
+                                                result = i == 1 ? result.substr(0, i * 9 + c * 1) + '<br>' + result.substr(i * 9 + c * 1, result.length) : result.substr(0, i * 9 + c * 4) + '<br>' + result.substr(i * 9 + c * 4, result.length);
+                                                c++;
 
+                                            }
+                                            return '<div class="text-center" title="' + data + '">' + result + '</div></div>';
+                                            //return '<div class="text-center" title="' + data + '">' + data.substr(0, 12) + '...</div>';
+                                        } else {
+                                            return '<div class="text-center" title="' + data + '">' + data + '</div>';
                                         }
-                                        return '<div class="text-center" title="' + data + '">' + result + '</div></div>';
-                                        //return '<div class="text-center" title="' + data + '">' + data.substr(0, 12) + '...</div>';
-                                    } else {
-                                        return '<div class="text-center" title="' + data + '">' + data + '</div>';
                                     }
+                                    return data;
                                 }
-                                return data;
-                            }
-                            //"render": function (data) {
-                            //    return '<div style="width:100px;">' + data + "</div>";
-                            //}
-                        },
-                        {
-                            "data": "remark", "name": "remark", "autoWidth": true,
-                            "render": function (data, type) {
-                                if (type === 'display') {
-                                    if (data.length > 13) {
-                                        return '<div class="text-center" title="' + data + '">' + data.substr(0, 4) + '...</div>';
-                                    } else {
-                                        return '<div class="text-center" title="' + data + '">' + data + '</div>';
+                                //"render": function (data) {
+                                //    return '<div style="width:100px;">' + data + "</div>";
+                                //}
+                            },
+                            {
+                                "data": "remark", "name": "remark", "autoWidth": true,
+                                "render": function (data, type) {
+                                    if (type === 'display') {
+                                        if (data.length > 13) {
+                                            return '<div class="text-center" title="' + data + '">' + data.substr(0, 4) + '...</div>';
+                                        } else {
+                                            return '<div class="text-center" title="' + data + '">' + data + '</div>';
+                                        }
                                     }
+                                    return data;
+                                    //return '<div style="width:100px;">' + data + "</div>";
                                 }
-                                return data;
-                                //return '<div style="width:100px;">' + data + "</div>";
-                            }
-                        },
-                        {
-                            "data": "time", "name": "time", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="width:80px;">' + data + "</div>";
-                            }
-                        },
-                        {
-                            "data": "status", "name": "status", "autoWidth": true,
-                            "render": function (data) {
-                                return '<div style="width:80px;">' + data + "</div>";
-                            }
-                        },
-                        {
-                            //"data": "id.Increment", "name": "id.Increment", "autoWidth": true,
-                            "data": "strid", "name": "strid", "autoWidth": true,
-                            "render": function (data, type, row, meta) {
-                                return '<a href="#" style="width:50px;" onclick="AddEditID_Plumber(\'' + data + '\')"><i class="fas fa-edit"></i></a>  <input type="checkbox" name="checklist" value="' + data + '" />'
+                            },
+                            {
+                                "data": "time", "name": "time", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="width:80px;">' + data + "</div>";
+                                }
+                            },
+                            {
+                                "data": "status", "name": "status", "autoWidth": true,
+                                "render": function (data) {
+                                    return '<div style="width:80px;">' + data + "</div>";
+                                }
+                            },
+                            {
+                                //"data": "id.Increment", "name": "id.Increment", "autoWidth": true,
+                                "data": "strid", "name": "strid", "autoWidth": true,
+                                "render": function (data, type, row, meta) {
+                                    return '<a href="#" style="width:50px;" onclick="AddEditID_Plumber(\'' + data + '\')"><i class="fas fa-edit"></i></a>  <input type="checkbox" name="checklist" value="' + data + '" />'
 
-                            }
+                                }
 
-                        },
-                    ],
-                    "columnDefs": [
-                        { "className": "dt-center", "targets": "_all" },
-                    ],
+                            },
+                        ],
+                        "columnDefs": [
+                            { "className": "dt-center", "targets": "_all" },
+                        ],
 
-                });
-            });
-        }
-        function Generator_WeekScehdule_Form() {
-            if ($('#SM_date_picker_input').val().length > 0) {
-                var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
-                var list = [$(ResultTable).html()];
-                var jsonText = JSON.stringify({ list: list });
-                //檔案下載網址
-                var url = "/Download_WeekSchedul.ashx";
-
-                //產生 form
-                var form = document.createElement("form");
-                form.method = "POST";
-                form.action = url;
-
-                //如果想要另開視窗可加上target
-                //form.target = "_blank";
-                //index為要下載的檔案編號，存入hidden跟表單一起送出
-
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "Parameter";
-                input.value = $('#SM_date_picker_input').val();
-                form.appendChild(input);
-
-                //送出表單並移除 form
-                var body = document.getElementsByTagName("body")[0];
-                body.appendChild(form);
-                form.submit();
-                form.remove();
-            }
-            else {
-                $.confirm({
-                    icon: 'far fa-check-circle',
-                    title: '錯誤',
-                    content: '請選擇當(週)其中一天日期',
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        close: {
-                            text: '確定',
-                            btnClass: 'btn-red',
-
-                        },
-                    }
+                    });
                 });
             }
-        }
-        function Generator_LeadersBigEvent_Form() {
-            if ($('#SM_date_picker_input').val().length > 0) {
-                console.log("搜尋年分:" + $('#SM_date_picker_input').val());
-                $.confirm({
-                    icon: 'fas fa-minus-circle',
-                    title: '',
-                    content: '<H3 style="text-align: center;"><span style="font-weight:bold;color:red;">注意</H3><br>' +
-                    '<style="text-align: center;">一、請利用非上班(17:00過後)時間使用此功能<br><br>' +
-                    '<style="text-align: center;">二、按下確定按鈕後不要再做任何操作，直到下載完Word檔案<br><br>',
-                    //type: 'orange',
-                    typeAnimated: true,
-                    buttons: {
-                        Correct: {
-                            text: '確定',
-                            btnClass: 'btn-red',
-                            action: function () {
-                                var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
-                                var list = [$(ResultTable).html()];
-                                var jsonText = JSON.stringify({ list: list });
-                                //檔案下載網址
-                                var url = "/DownloadBigEvent.ashx";
+            function Generator_WeekScehdule_Form() {
+                if ($('#SM_date_picker_input').val().length > 0) {
+                    var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
+                    var list = [$(ResultTable).html()];
+                    var jsonText = JSON.stringify({ list: list });
+                    //檔案下載網址
+                    var url = "/Download_WeekSchedul.ashx";
 
-                                //產生 form
-                                var form = document.createElement("form");
-                                form.method = "POST";
-                                form.action = url;
+                    //產生 form
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = url;
 
-                                //如果想要另開視窗可加上target
-                                //form.target = "_blank";
-                                //index為要下載的檔案編號，存入hidden跟表單一起送出
+                    //如果想要另開視窗可加上target
+                    //form.target = "_blank";
+                    //index為要下載的檔案編號，存入hidden跟表單一起送出
 
-                                var input = document.createElement("input");
-                                input.type = "hidden";
-                                input.name = "Parameter";
-                                input.value = $('#SM_date_picker_input').val();
-                                form.appendChild(input);
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "Parameter";
+                    input.value = $('#SM_date_picker_input').val();
+                    form.appendChild(input);
 
-                                //送出表單並移除 form
-                                var body = document.getElementsByTagName("body")[0];
-                                body.appendChild(form);
-                                form.submit();
-                                form.remove();
-                            }
-                        },
-                        close: {
-                            text: '關閉',
-                            btnClass: 'btn-green',
-
-                        },
-                    },
-                });
-            }
-            else {
-                $.confirm({
-                    icon: 'far fa-check-circle',
-                    title: '錯誤',
-                    content: '請於左側選擇當年日期任意一天，來輸出大事記',
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        close: {
-                            text: '確定',
-                            btnClass: 'btn-red',
-
-                        },
-                    }
-                });
-            }
-
-
-        }
-        function Generator_FormOnClick() {
-            var c = [];
-            $("input[type=checkbox]:checked").each(function () {
-                c.push($(this).val());
-            });
-            //result = c.toString();
-            if (c.length == 0) {
-                $.confirm({
-                    icon: 'far fa-check-circle',
-                    title: '錯誤',
-                    content: '請勾選需要產生表格的資料!',
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        close: {
-                            text: '確定',
-                            btnClass: 'btn-red',
-
-                        },
-                    }
-                });
-            }
-            else {
-                var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
-                var list = [$(ResultTable).html()];
-                var jsonText = JSON.stringify({ list: list });
-                //檔案下載網址
-                var url = "/Download.ashx";
-
-                //產生 form
-                var form = document.createElement("form");
-                form.method = "POST";
-                form.action = url;
-
-                //如果想要另開視窗可加上target
-                //form.target = "_blank";
-                //index為要下載的檔案編號，存入hidden跟表單一起送出
-
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "Parameter";
-                input.value = c;
-                form.appendChild(input);
-
-                //送出表單並移除 form
-                var body = document.getElementsByTagName("body")[0];
-                body.appendChild(form);
-                form.submit();
-                form.remove();
-                $("input[name='checklist']").each(function () {
-                    $(this).prop("checked", false);
-                });
-            }
-        }
-        function AddEditID_Plumber(data) {
-            console.log("data = " + data);
-            $.ajax({
-                url: "Plumber_table_viewer.asmx/Plumber_Search",
-                method: "post",
-                dataType: "json",
-                data: {
-                    ID: data,
-                },
-                success: function (data) {
-                    var time = data[0].time;
-                    var id_userinfo = "[IP:" + data[0].PC_ip + "]";
-                    console.log("ajax feedback " + data[0].time + "strid = " + data[0].strid);
+                    //送出表單並移除 form
+                    var body = document.getElementsByTagName("body")[0];
+                    body.appendChild(form);
+                    form.submit();
+                    form.remove();
+                }
+                else {
                     $.confirm({
-                        icon: 'fas fa-clipboard-list',
-                        title: '編輯',
-                        type: 'purple',
+                        icon: 'far fa-check-circle',
+                        title: '錯誤',
+                        content: '請選擇當(週)其中一天日期',
+                        type: 'red',
                         typeAnimated: true,
-                        content: '' +
-                        '<form action="" class="formName">' +
-                        '<div class="form-group">' +
-                        '<label>資料庫ID:</label>' +
-                        //'<input type="text" disabled class="edit_id form-control" value="' + data[0].Increment + '" placeholder="">' +
-                        '<input type="text" disabled class="edit_id form-control" value="' + data[0].strid + '" placeholder="">' +
-                        '<small class="form-text text-muted" >' + id_userinfo + '</small>' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>回報狀態:</label>' +
-                        '<select class="edit_status_Plumber form-control" name="category">' +
-                        '<option>' + data[0].status + '</option>' +
-                        '<option>已修繕完畢</option>' +
-                        '<option>水電班處理中</option>' +
-                        '<option>備料中</option>' +
-                        '<option>已委託工作班處理中</option>' +
-                        '<option>已委託修繕班處理中</option>' +
-                        '<option>已委託廠商處理中</option>' +
-                        '</select>' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修單位:</label>' +
-                        '<input type="text" disabled class="edit_Unit form-control" value="' + data[0].Unit + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>時間:</label>' +
-                        '<input type="text" disabled class="edit_time form-control" value="' + time + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修人:</label>' +
-                        '<input type="text" disabled class="edit_reporter form-control" value="' + data[0].reporter + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修項目:</label>' +
-                        '<input type="text" disabled class="edit_fix_item form-control" value="' + data[0].fix_item + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>報修地點:</label>' +
-                        '<input type="text" disabled class="edit_location form-control" value="' + data[0].location + '" placeholder="">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label>備註:</label>' +
-                        '<textarea rows="5" class="edit_remark_manament form-control" placeholder="">' + data[0].remark + '</textarea>' +
-                        '</div>' +
-                        //'<label>回報狀態:</label>' +
-                        //'<input type="text" class="edit_status form-control" value="' + data[0].status + '" placeholder="">' +
-
-                        '</form>',
                         buttons: {
-                            Delete: {
-                                text: '刪除',
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-red',
+
+                            },
+                        }
+                    });
+                }
+            }
+            function Generator_LeadersBigEvent_Form() {
+                if ($('#SM_date_picker_input').val().length > 0) {
+                    $.confirm({
+                        icon: 'fas fa-minus-circle',
+                        title: '',
+                        content: '<H3 style="text-align: center;"><span style="font-weight:bold;color:red;">注意</H3><br>' +
+                        '<style="text-align: center;">一、請利用非上班(17:00過後)時間使用此功能<br><br>' +
+                        '<style="text-align: center;">二、按下確定按鈕後不要再做任何操作，直到下載完Word檔案<br><br>',
+                        type: 'orange',
+                        typeAnimated: true,
+                        buttons: {
+                            Correct: {
+                                text: '確定',
                                 btnClass: 'btn-red',
                                 action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    swal({
-                                        title: "刪除確認",
-                                        text: "時間:" + time + "\n報修單位:" + data[0].Unit + "\n報修人:" + data[0].reporter + "\n報修項目:" + data[0].fix_item,
-                                        type: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonClass: "btn-danger",
-                                        cancelButtonText: "取消",
-                                        confirmButtonText: "確定",
-                                        closeOnConfirm: true
-                                    },
-                                        function () {
-                                            $.ajax({
-                                                url: "Plumber_table_viewer.asmx/Delete",
-                                                method: "post",
-                                                dataType: "json",
-                                                data: {
-                                                    ID: edit_ID,
-                                                },
-                                                success: function (data) {
-                                                    console.log("ajax update " + data);
-                                                    PMDB.ajax.reload();
-                                                    PDTV.ajax.reload();
-                                                },
-                                                error: function (err) {
+                                    var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
+                                    var list = [$(ResultTable).html()];
+                                    var jsonText = JSON.stringify({ list: list });
+                                    //檔案下載網址
+                                    var url = "/DownloadLeadersBigEvent.ashx";
 
-                                                },
-                                            });
-                                        });
-                                },
-                            },
-                            formSubmit: {
-                                text: '更新',
-                                btnClass: 'btn-blue',
-                                action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    var edit_update_status = this.$content.find('.edit_status_Plumber').val();
-                                    var edit_update_remark = this.$content.find('.edit_remark_manament').val();
-                                    $.ajax({
-                                        url: "Plumber_table_viewer.asmx/Plumber_update",
-                                        method: "post",
-                                        dataType: "json",
-                                        data: {
-                                            ID: edit_ID,
-                                            update_status: edit_update_status,
-                                            remark: edit_update_remark
-                                        },
-                                        success: function (data) {
-                                            console.log("ajax update " + data);
-                                            PMDB.ajax.reload();
-                                            PDTV.ajax.reload();
-                                        },
-                                        error: function (err) {
+                                    //產生 form
+                                    var form = document.createElement("form");
+                                    form.method = "POST";
+                                    form.action = url;
 
-                                        },
+                                    //如果想要另開視窗可加上target
+                                    //form.target = "_blank";
+                                    //index為要下載的檔案編號，存入hidden跟表單一起送出
 
-                                    });
+                                    var input = document.createElement("input");
+                                    input.type = "hidden";
+                                    input.name = "Parameter";
+                                    input.value = $('#SM_date_picker_input').val();
+                                    form.appendChild(input);
+
+                                    //送出表單並移除 form
+                                    var body = document.getElementsByTagName("body")[0];
+                                    body.appendChild(form);
+                                    form.submit();
+                                    form.remove();
                                 }
                             },
-                            cancel: {
-                                text: '取消',
-                                action: function () {
+                            close: {
+                                text: '關閉',
+                                btnClass: 'btn-green',
 
-                                    //close
-                                },
-                            }
-                        },
-                        //onContentReady: function () {
-                        //    // bind to events
-                        //    var jc = this;
-                        //    this.$content.find('form').on('submit', function (e) {
-                        //        // if the user submits the form by pressing enter in the field.
-                        //        e.preventDefault();
-                        //        jc.$$formSubmit.trigger('click'); // reference the button and click it
-                        //    });
-                        //}
+                            },
+                        }
                     });
-                },
-                error: function (err) {
+                }
+                else {
+                    $.confirm({
+                        icon: 'far fa-check-circle',
+                        title: '錯誤',
+                        content: '請於左側選擇當年日期任意一天，來輸出大事記',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-red',
 
-                },
-
-            });
-        }
-        $(document).on('click', '#plumer_submit', function () {
-            plumer_info = ""
-
-            if (plumer_check() == true) {
-                var count_success = 0;
-                for (var i = 1; i <= count; i++) {
-                    $.ajax({
-                        url: "Plumber_Table.asmx/Plumber_Table_insert",
-                        method: "post",
-                        dataType: "json",
-                        data: {
-                            dmpgp: $("#dropdownMenuButton_group_plumber").text(),
-                            plumber_reporter: $('#plumber_reporter').val(),
-                            plumber_reporter_phone: $('#plumber_reporter_phone').val(),
-                            dmpip: $("#dropdownMenuButton_item_plumber" + i).text(),
-                            plumber_local: $("#plumber_local" + i).val(),
-                            remark: $("#remark" + i).val()
-                        },
-                        success: function (data) {
-                            count_success++;
-                            if (count_success == count) {
-                                //PMDB.ajax.reload();
-                                PDTV.ajax.reload();
-                                $.confirm({
-                                    icon: 'far fa-check-circle',
-                                    title: '成功',
-                                    content: '報修成功' + data,
-                                    type: 'green',
-                                    typeAnimated: true,
-                                    buttons: {
-                                        close: {
-                                            text: '確定',
-                                            btnClass: 'btn-green',
-                                            action: function () {
-                                                $('#plumber_Modal').modal('hide');
-                                                initial_plumber_Modal();
-                                            }
-                                        },
-                                    }
-                                });
-                            }
-                        },
-                        error: function (data) {
-                            if (count_success == count) {
-                                $.confirm({
-                                    title: '報修失敗',
-                                    content: '請再重新報修或是通知資訊室' + data,
-                                    type: 'red',
-                                    typeAnimated: true,
-                                    buttons: {
-                                        tryAgain: {
-                                            text: '返回首頁',
-                                            btnClass: 'btn-red',
-                                            action: function () {
-                                                $('#plumber_Modal').modal('hide');
-                                                initial_plumber_Modal();
-                                            }
-                                        },
-                                    }
-                                });
-                            }
-                        },
-
+                            },
+                        }
                     });
                 }
 
+
             }
-            else {
-                $.confirm({
-                    icon: 'fas fa-minus-circle',
-                    title: '表格錯誤或空白',
-                    content: plumer_info,
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        tryAgain: {
-                            text: '返回',
-                            btnClass: 'btn-red',
-                            action: function () {
-                            }
-                        },
-                    }
+            function Generator_FormOnClick() {
+                var c = [];
+                $("input[type=checkbox]:checked").each(function () {
+                    c.push($(this).val());
+                });
+                //result = c.toString();
+                if (c.length == 0) {
+                    $.confirm({
+                        icon: 'far fa-check-circle',
+                        title: '錯誤',
+                        content: '請勾選需要產生表格的資料!',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            close: {
+                                text: '確定',
+                                btnClass: 'btn-red',
+
+                            },
+                        }
+                    });
+                }
+                else {
+                    var ResultTable = jQuery('<div/>').append(jQuery('<table/>').append($('.hDivBox').find('thead').clone()).append($('.bDiv').find('tbody').clone()));
+                    var list = [$(ResultTable).html()];
+                    var jsonText = JSON.stringify({ list: list });
+                    //檔案下載網址
+                    var url = "/Download.ashx";
+
+                    //產生 form
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = url;
+
+                    //如果想要另開視窗可加上target
+                    //form.target = "_blank";
+                    //index為要下載的檔案編號，存入hidden跟表單一起送出
+
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "Parameter";
+                    input.value = c;
+                    form.appendChild(input);
+
+                    //送出表單並移除 form
+                    var body = document.getElementsByTagName("body")[0];
+                    body.appendChild(form);
+                    form.submit();
+                    form.remove();
+                    $("input[name='checklist']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+            }
+            function AddEditID_Plumber(data) {
+                console.log("data = " + data);
+                $.ajax({
+                    url: "Plumber_table_viewer.asmx/Plumber_Search",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        ID: data,
+                    },
+                    success: function (data) {
+                        var time = data[0].time;
+                        var id_userinfo = "[IP:" + data[0].PC_ip + "]";
+                        console.log("ajax feedback " + data[0].time + "strid = " + data[0].strid);
+                        $.confirm({
+                            icon: 'fas fa-clipboard-list',
+                            title: '編輯',
+                            type: 'purple',
+                            typeAnimated: true,
+                            content: '' +
+                            '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                            '<label>資料庫ID:</label>' +
+                            //'<input type="text" disabled class="edit_id form-control" value="' + data[0].Increment + '" placeholder="">' +
+                            '<input type="text" disabled class="edit_id form-control" value="' + data[0].strid + '" placeholder="">' +
+                            '<small class="form-text text-muted" >' + id_userinfo + '</small>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>回報狀態:</label>' +
+                            '<select class="edit_status_Plumber form-control" name="category">' +
+                            '<option>' + data[0].status + '</option>' +
+                            '<option>已修繕完畢</option>' +
+                            '<option>水電班處理中</option>' +
+                            '<option>備料中</option>' +
+                            '<option>已委託工作班處理中</option>' +
+                            '<option>已委託修繕班處理中</option>' +
+                            '<option>已委託廠商處理中</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修單位:</label>' +
+                            '<input type="text" disabled class="edit_Unit form-control" value="' + data[0].Unit + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>時間:</label>' +
+                            '<input type="text" disabled class="edit_time form-control" value="' + time + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修人:</label>' +
+                            '<input type="text" disabled class="edit_reporter form-control" value="' + data[0].reporter + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修項目:</label>' +
+                            '<input type="text" disabled class="edit_fix_item form-control" value="' + data[0].fix_item + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>報修地點:</label>' +
+                            '<input type="text" disabled class="edit_location form-control" value="' + data[0].location + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                            '<label>備註:</label>' +
+                            '<textarea rows="5" class="edit_remark_manament form-control" placeholder="">' + data[0].remark + '</textarea>' +
+                            '</div>' +
+                            //'<label>回報狀態:</label>' +
+                            //'<input type="text" class="edit_status form-control" value="' + data[0].status + '" placeholder="">' +
+
+                            '</form>',
+                            buttons: {
+                                Delete: {
+                                    text: '刪除',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        var edit_ID = this.$content.find('.edit_id').val();
+                                        swal({
+                                            title: "刪除確認",
+                                            text: "時間:" + time + "\n報修單位:" + data[0].Unit + "\n報修人:" + data[0].reporter + "\n報修項目:" + data[0].fix_item,
+                                            type: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonClass: "btn-danger",
+                                            cancelButtonText: "取消",
+                                            confirmButtonText: "確定",
+                                            closeOnConfirm: true
+                                        },
+                                            function () {
+                                                $.ajax({
+                                                    url: "Plumber_table_viewer.asmx/Delete",
+                                                    method: "post",
+                                                    dataType: "json",
+                                                    data: {
+                                                        ID: edit_ID,
+                                                    },
+                                                    success: function (data) {
+                                                        console.log("ajax update " + data);
+                                                        PMDB.ajax.reload();
+                                                        PDTV.ajax.reload();
+                                                    },
+                                                    error: function (err) {
+
+                                                    },
+                                                });
+                                            });
+                                    },
+                                },
+                                formSubmit: {
+                                    text: '更新',
+                                    btnClass: 'btn-blue',
+                                    action: function () {
+                                        var edit_ID = this.$content.find('.edit_id').val();
+                                        var edit_update_status = this.$content.find('.edit_status_Plumber').val();
+                                        var edit_update_remark = this.$content.find('.edit_remark_manament').val();
+                                        $.ajax({
+                                            url: "Plumber_table_viewer.asmx/Plumber_update",
+                                            method: "post",
+                                            dataType: "json",
+                                            data: {
+                                                ID: edit_ID,
+                                                update_status: edit_update_status,
+                                                remark: edit_update_remark
+                                            },
+                                            success: function (data) {
+                                                console.log("ajax update " + data);
+                                                PMDB.ajax.reload();
+                                                PDTV.ajax.reload();
+                                            },
+                                            error: function (err) {
+
+                                            },
+
+                                        });
+                                    }
+                                },
+                                cancel: {
+                                    text: '取消',
+                                    action: function () {
+
+                                        //close
+                                    },
+                                }
+                            },
+                            //onContentReady: function () {
+                            //    // bind to events
+                            //    var jc = this;
+                            //    this.$content.find('form').on('submit', function (e) {
+                            //        // if the user submits the form by pressing enter in the field.
+                            //        e.preventDefault();
+                            //        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                            //    });
+                            //}
+                        });
+                    },
+                    error: function (err) {
+
+                    },
+
                 });
             }
+            $(document).on('click', '#plumer_submit', function () {
+                plumer_info = ""
+
+                if (plumer_check() == true) {
+                    var count_success = 0;
+                    for (var i = 1; i <= count; i++) {
+                        $.ajax({
+                            url: "Plumber_Table.asmx/Plumber_Table_insert",
+                            method: "post",
+                            dataType: "json",
+                            data: {
+                                dmpgp: $("#dropdownMenuButton_group_plumber").text(),
+                                plumber_reporter: $('#plumber_reporter').val(),
+                                plumber_reporter_phone: $('#plumber_reporter_phone').val(),
+                                dmpip: $("#dropdownMenuButton_item_plumber" + i).text(),
+                                plumber_local: $("#plumber_local" + i).val(),
+                                remark: $("#remark" + i).val()
+                            },
+                            success: function (data) {
+                                count_success++;
+                                if (count_success == count) {
+                                    //PMDB.ajax.reload();
+                                    PDTV.ajax.reload();
+                                    $.confirm({
+                                        icon: 'far fa-check-circle',
+                                        title: '成功',
+                                        content: '報修成功' + data,
+                                        type: 'green',
+                                        typeAnimated: true,
+                                        buttons: {
+                                            close: {
+                                                text: '確定',
+                                                btnClass: 'btn-green',
+                                                action: function () {
+                                                    $('#plumber_Modal').modal('hide');
+                                                    initial_plumber_Modal();
+                                                }
+                                            },
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (data) {
+                                if (count_success == count) {
+                                    $.confirm({
+                                        title: '報修失敗',
+                                        content: '請再重新報修或是通知資訊室' + data,
+                                        type: 'red',
+                                        typeAnimated: true,
+                                        buttons: {
+                                            tryAgain: {
+                                                text: '返回首頁',
+                                                btnClass: 'btn-red',
+                                                action: function () {
+                                                    $('#plumber_Modal').modal('hide');
+                                                    initial_plumber_Modal();
+                                                }
+                                            },
+                                        }
+                                    });
+                                }
+                            },
+
+                        });
+                    }
+
+                }
+                else {
+                    $.confirm({
+                        icon: 'fas fa-minus-circle',
+                        title: '表格錯誤或空白',
+                        content: plumer_info,
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            tryAgain: {
+                                text: '返回',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                }
+                            },
+                        }
+                    });
+                }
 
 
-        });
+            });
     </script>
 
 </body>

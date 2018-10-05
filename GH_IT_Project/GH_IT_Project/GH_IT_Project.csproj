@@ -347,6 +347,7 @@
     <Content Include="DatetimePicker\js\bootstrap-datetimepicker.js" />
     <Content Include="DatetimePicker\js\bootstrap-datetimepicker.min.js" />
     <Content Include="DatetimePicker\js\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="FeedBackMsgNum.asmx" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -454,7 +455,7 @@
     <Content Include="DataTables\Buttons-1.5.1\css\mixins.scss" />
     <Content Include="Download.ashx" />
     <Content Include="Download_WeekSchedul.ashx" />
-    <Content Include="DownloadYearSchedule.ashx" />
+    <Content Include="DownloadBigEvent.ashx" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -507,11 +508,15 @@
     <Compile Include="Download.ashx.cs">
       <DependentUpon>Download.ashx</DependentUpon>
     </Compile>
-    <Compile Include="DownloadYearSchedule.ashx.cs">
-      <DependentUpon>DownloadYearSchedule.ashx</DependentUpon>
+    <Compile Include="DownloadBigEvent.ashx.cs">
+      <DependentUpon>DownloadBigEvent.ashx</DependentUpon>
     </Compile>
     <Compile Include="Download_WeekSchedul.ashx.cs">
       <DependentUpon>Download_WeekSchedul.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="FeedBackMsgNum.asmx.cs">
+      <DependentUpon>FeedBackMsgNum.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>

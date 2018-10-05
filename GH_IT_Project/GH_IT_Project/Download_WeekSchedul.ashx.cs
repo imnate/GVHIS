@@ -147,40 +147,81 @@ namespace GH_IT_Project
                         Tables.Cell(1, k + 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
                     }
                 }
-
-                for (int i = 0; i < List_Schedule[j].Count; i++)
+                if (j != 2)
                 {
-                    string[] DateAll = List_Schedule[j][i].S_time.Split(' ');
-                    string[] mmdd = DateAll[0].Split('-');
-                    Tables.Cell(i + 2, 1).Range.Font.Name = "標楷體";
-                    Tables.Cell(i + 2, 1).Range.Font.Size = 14;
-                    Tables.Cell(i + 2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                    Tables.Cell(i + 2, 1).Range.Text = mmdd[1] + "/" + mmdd[2];
-                    Tables.Cell(i + 2, 1).Range.Text += "(" + DateAll[1].Substring(2) + ")";
-                    Tables.Cell(i + 2, 1).Range.Text += DateAll[2];
-                    
+                    for (int i = 0; i < List_Schedule[j].Count; i++)
+                    {
+                        string[] DateAll = List_Schedule[j][i].S_time.Split(' ');
+                        string[] mmdd = DateAll[0].Split('-');
+                        Tables.Cell(i + 2, 1).Range.Text = mmdd[1] + "/" + mmdd[2];
+                        Tables.Cell(i + 2, 1).Range.Text += "(" + DateAll[1].Substring(2) + ")";
+                        Tables.Cell(i + 2, 1).Range.Text += DateAll[2];
+                        Tables.Cell(i + 2, 1).Range.Text += "|";
+                        Tables.Cell(i + 2, 1).Range.Text += List_Schedule[j][i].S_end_time;
+                        Tables.Cell(i + 2, 1).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 1).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    Tables.Cell(i + 2, 2).Range.Text = List_Schedule[j][i].Work_item;
-                    Tables.Cell(i + 2, 2).Range.Font.Name = "標楷體";
-                    Tables.Cell(i + 2, 2).Range.Font.Size = 14;
-                    Tables.Cell(i + 2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                        Tables.Cell(i + 2, 2).Range.Text = List_Schedule[j][i].Work_item;
+                        Tables.Cell(i + 2, 2).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 2).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    Tables.Cell(i + 2, 3).Range.Text = List_Schedule[j][i].Local;
-                    Tables.Cell(i + 2, 3).Range.Font.Name = "標楷體";
-                    Tables.Cell(i + 2, 3).Range.Font.Size = 14;
-                    Tables.Cell(i + 2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                        Tables.Cell(i + 2, 3).Range.Text = List_Schedule[j][i].Local;
+                        Tables.Cell(i + 2, 3).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 3).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    Tables.Cell(i + 2, 4).Range.Text = List_Schedule[j][i].S_host;
-                    Tables.Cell(i + 2, 4).Range.Font.Name = "標楷體";
-                    Tables.Cell(i + 2, 4).Range.Font.Size = 14;
-                    Tables.Cell(i + 2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                        Tables.Cell(i + 2, 4).Range.Text = List_Schedule[j][i].S_host;
+                        Tables.Cell(i + 2, 4).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 4).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                    Tables.Cell(i + 2, 5).Range.Text = List_Schedule[j][i].Duty;
-                    Tables.Cell(i + 2, 5).Range.Font.Name = "標楷體";
-                    Tables.Cell(i + 2, 5).Range.Font.Size = 14;
-                    Tables.Cell(i + 2, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                        Tables.Cell(i + 2, 5).Range.Text = List_Schedule[j][i].Duty;
+                        Tables.Cell(i + 2, 5).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 5).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                    }
                 }
+                else
+                {
+                    for (int i = 0; i < List_Schedule[j].Count; i++)
+                    {
+                        string[] DateAll = List_Schedule[j][i].S_time.Split(' ');
+                        string[] mmdd = DateAll[0].Split('-');
+                        Tables.Cell(i + 2, 1).Range.Text = mmdd[1] + "/" + mmdd[2];
+                        Tables.Cell(i + 2, 1).Range.Text += "(" + DateAll[1].Substring(2) + ")";
+                        Tables.Cell(i + 2, 1).Range.Text += DateAll[2];
+                        Tables.Cell(i + 2, 1).Range.Text += "|";
+                        Tables.Cell(i + 2, 1).Range.Text += List_Schedule[j][i].S_end_time;
+                        Tables.Cell(i + 2, 1).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 1).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 1).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
+                        Tables.Cell(i + 2, 2).Range.Text = List_Schedule[j][i].Work_item;
+                        Tables.Cell(i + 2, 2).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 2).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 2).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+                        Tables.Cell(i + 2, 3).Range.Text = List_Schedule[j][i].Local;
+                        Tables.Cell(i + 2, 3).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 3).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 3).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+                        Tables.Cell(i + 2, 4).Range.Text = List_Schedule[j][i].Participants;
+                        Tables.Cell(i + 2, 4).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 4).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 4).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+
+                        Tables.Cell(i + 2, 5).Range.Text = List_Schedule[j][i].Duty;
+                        Tables.Cell(i + 2, 5).Range.Font.Name = "標楷體";
+                        Tables.Cell(i + 2, 5).Range.Font.Size = 13;
+                        Tables.Cell(i + 2, 5).Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                    }
+                }
+                //Tables.Columns[2].AutoFit();
+                Tables.Rows.Alignment = Word.WdRowAlignment.wdAlignRowCenter;//表格置中
+                Tables.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitContent);//全部自動Fitting
             }
 
             oDoc.SaveAs(ref filepath, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);

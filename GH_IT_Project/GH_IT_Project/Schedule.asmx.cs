@@ -27,12 +27,14 @@ namespace GH_IT_Project
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
             DateTime DT = DateTime.Now;
+            
             MongoDB_connection MDBC = new MongoDB_connection();
             string userName = HttpContext.Current.Request.UserHostName;
             var database = MDBC.MongoDB("Schedule_table");
             var collection_out = database.GetCollection<BsonDocument>("Schedule_table");//my class also can use <T> = <BsonDocument>
             var insert_str = new BsonDocument
             {
+            
                      {  "S_time", S_time },
                      {  "S_end_time", S_end_time },
                      {  "Local", Local},
@@ -51,21 +53,31 @@ namespace GH_IT_Project
                 List<output> List_out = new List<output>();
                 collection_out.InsertOne(insert_str);
                 string[] convert_Stime = S_time.Split(' ');
-                DateTime Schedule_DTime = Convert.ToDateTime(convert_Stime[0]);
-                int count = (Schedule_DTime.DayOfYear - DT.DayOfYear);
-                if (count < 3 || (DT.DayOfWeek.ToString().Equals("Friday") && convert_Stime[1].Equals("星期一") && count < 4))
+                string[] S_timeSplit = convert_Stime[0].Split('-');
+                string[] yMD = DateTime.Now.ToString("yyyy-MM-dd").Split('-');
+               
+                DateTime DTS_time = new DateTime(Convert.ToInt32(S_timeSplit[0]), Convert.ToInt32(S_timeSplit[1]), Convert.ToInt32(S_timeSplit[2]));
+                DateTime DTNow = new DateTime(Convert.ToInt32(yMD[0]), Convert.ToInt32(yMD[1]), Convert.ToInt32(yMD[2]));
+
+                int Days = DTS_time.Subtract(DTNow).Days;
+
+                if (Days <= 3)
                 {
                     op.outcase = 1;
                     op.date = DT.ToString();
+                    op.Days = Days;
                 }
                 else
                 {
                     op.outcase = 2;
                     op.date = DT.ToString();
+                    op.Days = Days;
                 }
                 List_out.Add(op);
 
                 Context.Response.Write(js.Serialize(List_out));
+                //Context.Response.Write(js.Serialize("行程時間:" + convert_Stime[0] + "現在時間:" + DateTime.Now.ToString("yyyy-MM-dd") + "間距日:"  + Days));
+              
             }
             catch (Exception e)
             {
@@ -76,6 +88,7 @@ namespace GH_IT_Project
         {
             public int outcase { get; set; }
             public string date { get; set; }
+            public int Days { get; set; }
         }
     }
 }

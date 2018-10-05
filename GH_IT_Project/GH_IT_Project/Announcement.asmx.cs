@@ -81,8 +81,8 @@ namespace GH_IT_Project
                          .Take(int_length)
                          .Select(x => new Announcement_table
                          {
-                             id=x.id,
-                             Date=x.Date.Replace(" ","<br/>"),
+                             id = x.id,
+                             Date = x.Date.Replace(" ", "<br/>"),
                              Title = "[" + new DateTime(1970, 1, 1).AddSeconds(x.id.Timestamp).ToString("MM-dd") + "] " + x.Title,
                              Info = x.Info,
                              Increment = x.id.Increment,
@@ -115,8 +115,8 @@ namespace GH_IT_Project
                     Title = s.Title,
                     Info = s.Info,
                     Increment = s.id.Increment,
-                    
-        })
+
+                })
                 .Where(x => x.Increment.Equals(Convert.ToInt32(ID)))
                 .ToList();
 

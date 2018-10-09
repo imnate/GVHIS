@@ -117,7 +117,7 @@
             <br>
             <div class="row">
                 <div class="col-md-2"></div>
-                <div class="col-md-8"><span style="font-size: 10px;">Copyright © 2018 by NATHAN HUANG. All rights reserved.  <a href="#"><i class="fas fa-user-secret"></i></a></span></div>
+                <div class="col-md-8"><span style="font-size: 10px;">Copyright © 2018 by NATHAN HUANG. All rights reserved.  <a href="#"><i class="fas fa-user-secret" onclick="Easter_egg()"></i></a></span></div>
                 <div class="col-md-2"></div>
             </div>
             <div class="row">
@@ -268,7 +268,33 @@
         </div>
     </div>
 
+    <script>
+        function Easter_egg() {
 
+            $.confirm({
+                icon: 'fas fa-comment',
+                title: '彩蛋',
+                content:
+                '<div style="text-align: left;">' +
+                '此系統感謝吳彥駒先生支持，'
+                + '並感謝岡山榮家全體員工讓我有機會可以為你們撰寫此網頁，'
+                + '我是作者 183T替代役男 黃智鐸 畢業於元智大學104年資訊工程研究所，'
+                + '退伍於2018-10-17。'
+                + '<br>此系統授權於岡山榮家使用，盜版必究。'
+                + '</div>',
+                type: 'orange',
+                typeAnimated: true,
+                buttons: {
+                    correct: {
+                        text: '確定',
+                        btnClass: 'btn-green',
+                        action: function () {
+                        }
+                    },
+                }
+            });
+        }
+    </script>
 
     <%--oncontextmenu="return false" 鎖右鍵--%>
 
@@ -996,7 +1022,6 @@
                                                                         showCancelButton: true,
                                                                         confirmButtonClass: "btn-success",
                                                                         confirmButtonText: "確定",
-                                                                        cancelButtonText: "取消",
                                                                         closeOnConfirm: false
                                                                     });
                                                                 },
@@ -1011,7 +1036,7 @@
                                             $.confirm({
                                                 icon: 'fas fa-exclamation-triangle',
                                                 title: '錯誤',
-                                                content: '年份:' + DeleteOldBigEventYear + '<br>資料庫資料筆數: ' + data[0].Count + '筆<br>搜尋不到任何資料，或刪除年份還未准許刪除!<br>(只允許刪除去年的資料)',
+                                                content: '刪除年份:' + DeleteOldBigEventYear + '<br>資料庫資料筆數: ' + data[0].Count + '筆<br>搜尋不到任何資料，或刪除年份還未准許刪除!<br>(只允許刪除去年的資料)',
                                                 type: 'red',
                                                 typeAnimated: true,
                                                 buttons: {
@@ -1421,7 +1446,6 @@
                                         showCancelButton: true,
                                         confirmButtonClass: "btn-success",
                                         confirmButtonText: "確定",
-                                        cancelButtonText: "取消",
                                         closeOnConfirm: false
                                     });
                                     Ss_management.ajax.reload();
@@ -2328,7 +2352,6 @@
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
                         confirmButtonText: "確定",
-                        cancelButtonText: "取消",
                         closeOnConfirm: false
                     });
 
@@ -4111,7 +4134,6 @@
                                         showCancelButton: true,
                                         confirmButtonClass: "btn-success",
                                         confirmButtonText: "確定",
-                                        cancelButtonText: "取消",
                                         closeOnConfirm: false
                                     });
                                     PR_Datatable.ajax.reload();
@@ -4593,6 +4615,32 @@
 
                         '</form>',
                         buttons: {
+                            
+                            formSubmit: {
+                                text: '更新',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    var psw = this.$content.find('.edit_AuthPsw').val();
+                                    $.ajax({
+                                        url: "Login_ajax.asmx/Update",
+                                        method: "post",
+                                        dataType: "json",
+                                        data: {
+                                            ID: data[0].Increment,
+                                            psw: psw
+                                        },
+                                        success: function (data) {
+                                            console.log("ajax update " + data);
+                                            Am_DT.ajax.reload();
+                                            swal("系統回傳", data, "success");
+                                        },
+                                        error: function (err) {
+
+                                        },
+
+                                    });
+                                }
+                            },
                             delete: {
                                 text: '刪除',
                                 btnClass: 'btn-red',
@@ -4628,7 +4676,6 @@
                                                             showCancelButton: true,
                                                             confirmButtonClass: "btn-danger",
                                                             confirmButtonText: "確定",
-                                                            cancelButtonText: "取消",
                                                             closeOnConfirm: false
                                                         });
                                                     },
@@ -4641,33 +4688,6 @@
 
                                     }
                                     else { swal("禁止刪除", "此權限為超級管理者", "error"); }
-
-
-                                }
-                            },
-                            formSubmit: {
-                                text: '更新',
-                                btnClass: 'btn-blue',
-                                action: function () {
-                                    var psw = this.$content.find('.edit_AuthPsw').val();
-                                    $.ajax({
-                                        url: "Login_ajax.asmx/Update",
-                                        method: "post",
-                                        dataType: "json",
-                                        data: {
-                                            ID: data[0].Increment,
-                                            psw: psw
-                                        },
-                                        success: function (data) {
-                                            console.log("ajax update " + data);
-                                            Am_DT.ajax.reload();
-                                            swal("系統回傳", data, "success");
-                                        },
-                                        error: function (err) {
-
-                                        },
-
-                                    });
                                 }
                             },
                             cancel: {
@@ -5217,6 +5237,33 @@
                         '</div>' +
                         '</form>',
                         buttons: {
+                            
+                            formSubmit: {
+                                text: '更新',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    var edit_ID = this.$content.find('.edit_id').val();
+                                    var edit_update_status = this.$content.find('.edit_status_IT').val();
+                                    $.ajax({
+                                        url: "IT_table_viewer.asmx/IT_update",
+                                        method: "post",
+                                        dataType: "json",
+                                        data: {
+                                            ID: edit_ID,
+                                            update_status: edit_update_status
+                                        },
+                                        success: function (data) {
+                                            console.log("ajax update " + data);
+                                            ITMDB.ajax.reload();
+                                            IT_table.ajax.reload();
+                                        },
+                                        error: function (err) {
+
+                                        },
+
+                                    });
+                                }
+                            },
                             delete: {
                                 text: '刪除',
                                 btnClass: 'btn-red',
@@ -5252,39 +5299,13 @@
                                         });
                                 },
                             },
-                            formSubmit: {
-                                text: '更新',
-                                btnClass: 'btn-blue',
-                                action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    var edit_update_status = this.$content.find('.edit_status_IT').val();
-                                    $.ajax({
-                                        url: "IT_table_viewer.asmx/IT_update",
-                                        method: "post",
-                                        dataType: "json",
-                                        data: {
-                                            ID: edit_ID,
-                                            update_status: edit_update_status
-                                        },
-                                        success: function (data) {
-                                            console.log("ajax update " + data);
-                                            ITMDB.ajax.reload();
-                                            IT_table.ajax.reload();
-                                        },
-                                        error: function (err) {
-
-                                        },
-
-                                    });
-                                }
-                            },
                             cancel: {
                                 text: '取消',
                                 action: function () {
 
                                     //close
                                 },
-                            }
+                            },
                         },
                         //onContentReady: function () {
                         //    // bind to events
@@ -5716,6 +5737,34 @@
 
                         '</form>',
                         buttons: {
+                            formSubmit: {
+                                text: '更新',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    var edit_ID = this.$content.find('.edit_id').val();
+                                    var edit_update_status = this.$content.find('.edit_status_Plumber').val();
+                                    var edit_update_remark = this.$content.find('.edit_remark_manament').val();
+                                    $.ajax({
+                                        url: "Plumber_table_viewer.asmx/Plumber_update",
+                                        method: "post",
+                                        dataType: "json",
+                                        data: {
+                                            ID: edit_ID,
+                                            update_status: edit_update_status,
+                                            remark: edit_update_remark
+                                        },
+                                        success: function (data) {
+                                            console.log("ajax update " + data);
+                                            PMDB.ajax.reload();
+                                            PDTV.ajax.reload();
+                                        },
+                                        error: function (err) {
+
+                                        },
+
+                                    });
+                                }
+                            },
                             Delete: {
                                 text: '刪除',
                                 btnClass: 'btn-red',
@@ -5750,34 +5799,6 @@
                                             });
                                         });
                                 },
-                            },
-                            formSubmit: {
-                                text: '更新',
-                                btnClass: 'btn-blue',
-                                action: function () {
-                                    var edit_ID = this.$content.find('.edit_id').val();
-                                    var edit_update_status = this.$content.find('.edit_status_Plumber').val();
-                                    var edit_update_remark = this.$content.find('.edit_remark_manament').val();
-                                    $.ajax({
-                                        url: "Plumber_table_viewer.asmx/Plumber_update",
-                                        method: "post",
-                                        dataType: "json",
-                                        data: {
-                                            ID: edit_ID,
-                                            update_status: edit_update_status,
-                                            remark: edit_update_remark
-                                        },
-                                        success: function (data) {
-                                            console.log("ajax update " + data);
-                                            PMDB.ajax.reload();
-                                            PDTV.ajax.reload();
-                                        },
-                                        error: function (err) {
-
-                                        },
-
-                                    });
-                                }
                             },
                             cancel: {
                                 text: '取消',

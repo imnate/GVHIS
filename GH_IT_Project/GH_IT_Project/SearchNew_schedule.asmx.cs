@@ -225,8 +225,15 @@ namespace GH_IT_Project
             }
             else
             {
+                MongoDB_connection MDBC = new MongoDB_connection();
+                var database = MDBC.MongoDB("Schedule_table");
+                var collection_out = database.GetCollection<Schedule_table>("Schedule_table");
+
+                var list = new List<Schedule_table>();
+                list = collection_out.Find(x => x.S_time.Contains(Year)).ToList();
+
                 DBE.ToFYear = false;
-                DBE.Count = 0;
+                DBE.Count = list.Count;
                 List_DBE.Add(DBE);
                 
             }

@@ -564,7 +564,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="dropdown">
-                                <label for="label_repairs" class="col-lg-2">工作項目:</label>
+                                <label for="label_repairs" class="col-lg-12">工作項目(或受訓、開會項目):</label>
                                 <div class="col-sm-12">
                                     <textarea class="form-control" id="new_Ss_Modal_Work" placeholder="*必填 例如:XX辦法及相關規定講習"></textarea>
                                 </div>
@@ -595,7 +595,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="form-control-label col-sm-2">參加人員:</label>
+                                <label for="message-text" class="form-control-label col-sm-12">參加人員(或參訓人員):</label>
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" id="new_Ss_Participants" placeholder="*必填 例如:家主任、副主任(兩個以上人員請用 頓號、 或是 空一格 分開)">
                                 </div>
@@ -1092,7 +1092,9 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div style="padding: 35px 50px; background-color: #5cb85c;">
-                    <button type="button" id="Announce_Modal_cannel" class="close" data-dismiss="modal">&times;</button>
+                    <div style="text-align: right">   
+                        <button style="text-align: right" type="button" id="Announce_Modal_cannel" class="btn btn-primary" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                    </div>
                     <h4 style="background-color: #5cb85c;"><span class="glyphicon glyphicon-copy"></span>公告</h4>
                 </div>
                 <br />
@@ -1871,14 +1873,16 @@
                 dataType: "json",
                 success: function (data) {
                     data = JSON.parse(data);
-                    var db_total = data[0].objects + data[1].objects + data[2].objects + data[3].objects + data[4].objects;
+                    var db_total = data[0].objects + data[1].objects + data[2].objects + data[3].objects + data[4].objects + data[5].objects;
+                    var total_storageSize = (data[0].storageSize + data[1].storageSize + data[2].storageSize + data[3].storageSize + data[4].storageSize + data[5].storageSize)  / 1000000
                     console.log(data);
                     Highcharts.chart('Highcharts_container', {
                         chart: {
                             type: 'column'
                         },
                         title: {
-                            text: '各資料庫使用比例'
+                            text: '各資料庫使用比例<br>' + '[總占用磁碟大小:' + total_storageSize +'MB]'
+                            
                         },
                         subtitle: {
                             text: ''
@@ -1907,7 +1911,7 @@
 
                         tooltip: {
                             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                            pointFormat: '<span style="color:{point.color}"></span>總共: <b>{point.total}筆 (佔全部{point.y:.2f}%)</b><br/>已使用空間: <b>{point.dataSize} MB</b><br/>平均每筆: <b>{point.avgObjSize:.2f} Bytes</b><br/>'
+                            pointFormat: '<span style="color:{point.color}"></span>總共: <b>{point.total}筆 (佔全部{point.y:.2f}%)</b><br/>已使用空間: <b>{point.dataSize} MB</b><br/>平均每筆: <b>{point.avgObjSize:.2f} Bytes</b><br/><br/>占用磁碟: <b>{point.storageSize:.2f} MB</b><br/>'
                         },
 
                         "series": [
@@ -1918,9 +1922,10 @@
                                     {
                                         "name": "資訊室報修",
                                         "y": data[0].objects / db_total * 100,
-                                        "total": data[0].objects,
+                                        "total": data[0].objects, //筆數
                                         "dataSize": data[0].dataSize / 1000000,
                                         "avgObjSize": data[0].avgObjSize,
+                                        "storageSize": data[0].storageSize / 1000000,
                                     },
                                     {
                                         "name": "水電班報修",
@@ -1928,6 +1933,7 @@
                                         "total": data[1].objects,
                                         "dataSize": data[1].dataSize / 1000000,
                                         "avgObjSize": data[1].avgObjSize,
+                                        "storageSize": data[1].storageSize / 1000000,
                                     },
                                     {
                                         "name": "首長、各組室行程表",
@@ -1935,20 +1941,31 @@
                                         "total": data[2].objects,
                                         "dataSize": data[2].dataSize / 1000000,
                                         "avgObjSize": data[2].avgObjSize,
+                                        "storageSize": data[2].storageSize / 1000000,
                                     },
                                     {
-                                        "name": "公告",
+                                        "name": "人事室出勤狀況",
                                         "y": data[3].objects / db_total * 100,
                                         "total": data[3].objects,
                                         "dataSize": data[3].dataSize / 1000000,
                                         "avgObjSize": data[3].avgObjSize,
+                                        "storageSize": data[3].storageSize / 1000000,
                                     },
                                     {
-                                        "name": "使用者帳號",
+                                        "name": "公告",
                                         "y": data[4].objects / db_total * 100,
                                         "total": data[4].objects,
                                         "dataSize": data[4].dataSize / 1000000,
                                         "avgObjSize": data[4].avgObjSize,
+                                        "storageSize": data[4].storageSize / 1000000,
+                                    },
+                                    {
+                                        "name": "使用者帳號",
+                                        "y": data[5].objects / db_total * 100,
+                                        "total": data[5].objects,
+                                        "dataSize": data[5].dataSize / 1000000,
+                                        "avgObjSize": data[5].avgObjSize,
+                                        "storageSize": data[5].storageSize / 1000000,
                                     },
                                 ]
                             }
@@ -2930,6 +2947,7 @@
                                         <li><a href="#">育善堂(四隊)</a></li>
                                         <li><a href="#">育愛堂(五隊)</a></li>
                                         <li><a href="#">育智堂(六隊)</a></li>
+                                        <%--<li><a href="#">改建的舊育善堂 (取名請跟接下來的註解一致)</a></li>--%>
                                     </ul>
                                 </div>
                             </div>
@@ -4447,11 +4465,11 @@
                 '<label>權限:</label>' +
                 '<select id="authority_select" class="form-control" onclick="authority_select_value(this)" name="category">' +
                 '<option value="0">請選擇權限</option>' +
-                '<option value="1" title="水電、工作、修繕班報修管理權限">水電班</option>' +
-                '<option value="2" title="行程表管理權限">秘書</option>' +
-                '<option value="3" title="資訊設備報修管理權限">資訊室</option>' +
-                '<option value="4" title="水電報修回報確認權限">堂隊或組室</option>' +
-                '<option value="5" title="請假公告權限">人事室</option>' +
+                '<option value="1" title="水電、工作、修繕班報修管理權限">水電班(管理者)</option>' +
+                '<option value="2" title="行程表管理權限">秘書(管理者)</option>' +
+                '<option value="3" title="資訊設備報修管理權限">資訊室(管理者)</option>' +
+                '<option value="4" title="水電報修回報確認權限">堂隊或組室(水電確認)</option>' +
+                '<option value="5" title="請假公告權限">人事室(管理者)</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="edit_authority_user form-group">' +
@@ -4467,6 +4485,7 @@
                 '<option value="4">育善堂(四隊)</option>' +
                 '<option value="5">育愛堂(五隊)</option>' +
                 '<option value="6">育智堂(六隊)</option>' +
+              //'<option value="13">改建的舊育善堂 (取名請跟接下來的註解一致)</option>' +
                 '<option value="7" title="非行程表管理權限(水電班審核使用)">秘書室</option>' +
                 '<option value="8">保健組</option>' +
                 '<option value="9">輔導室</option>' +
@@ -4822,6 +4841,7 @@
                                         <li><a id="plumber_7">育善堂(四隊)</a></li>
                                         <li><a id="plumber_8">育愛堂(五隊)</a></li>
                                         <li><a id="plumber_9">育智堂(六隊)</a></li>
+                                        <%--<li><a id="plumber_10">改建的舊育善堂 (取名請跟接下來的註解一致)</a></li>--%>
                                     </ul>
                                 </div>
                             </div>

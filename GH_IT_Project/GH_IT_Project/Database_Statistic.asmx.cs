@@ -31,8 +31,9 @@ namespace GH_IT_Project
             List_Statistic.Add(stats("IT_table"));
             List_Statistic.Add(stats("plumber_table"));
             List_Statistic.Add(stats("Schedule_table"));
+            List_Statistic.Add(stats("PR"));
             List_Statistic.Add(stats("Announcement_table"));
-            List_Statistic.Add(stats("admin_account_info"));
+            List_Statistic.Add(stats("admin_account_info")); 
             Context.Response.Write(js.Serialize(List_Statistic.ToJson()));
         }
         private BsonDocument stats(string table_name)

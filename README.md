@@ -15,5 +15,5 @@
 ![](img/index.jpg)
 
 ## 行程表填寫與行程過濾警告
-<img src ="img/新增每日工作預定表.jpg" width = 400>
+<img src ="img/新增每日工作預定表.jpg" width = 400 class="center">
 

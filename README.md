@@ -40,8 +40,11 @@
 </p>
 
 ## 首長行程表程式碼
+        ### 抓取首長當天行程所占用時間，建立一個當日Dictionary<string,bool> <紀錄時間每五分鐘一格,T or F>
+        ### 判斷使用者新增的行程時間是否有為T為有空檔,F為沒空檔
+        ### 有空則可新增行程,沒空告知有空檔的時間
 
-private List<Feed_Back> Chech_schedule_TorF(Dictionary<string, bool> TorF_Dictionary, string begin_time, string end_time, List<string> Schedule_time, List<Vaild_increment> List_Vaild)//interval_time 單位分鐘
+        private List<Feed_Back> Chech_schedule_TorF(Dictionary<string, bool> TorF_Dictionary, string begin_time, string end_time, List<string> Schedule_time, List<Vaild_increment> List_Vaild)
         {
             List<Feed_Back> Feed_back = new List<Feed_Back>();
             Feed_Back FB = new Feed_Back();

@@ -39,7 +39,7 @@
 <img src ="img/報修查詢.jpg" width = 400>
 </p>
 
-## 首長行程表程式碼
+## 行程過濾程式碼
         ### 抓取首長當天行程所占用時間，建立一個當日Dictionary<string,bool> <紀錄時間每五分鐘一格,T or F>
         ### 判斷使用者新增的行程時間是否有為T為有空檔,F為沒空檔
         ### 有空則可新增行程,沒空告知有空檔的時間
@@ -169,7 +169,7 @@
                             interval_endMin = 0;
                         }
                     }
-                    //-----------處理TorF-----------
+
                     for (int t = begin_hour; t <= interval_endHour; t++)
                     {
                         string t_temp = t < 10 ? "0" + t.ToString() : t.ToString();
@@ -197,7 +197,7 @@
                         }
 
                     }
-                    //-----------處理TorF-----------
+                  
 
                 }
             }

@@ -116,7 +116,7 @@
                 string[] Be_temp = { };
                 string[] End_temp = { };
                 string duty = list[i].Duty.Length > 10 ? list[i].Duty.Substring(10) + "...(詳情請查詢工作管制表)<br>" : list[i].Duty + "<br>";
-                temp = list[i].S_time.Split(' ');//切調中文日期
+                temp = list[i].S_time.Split(' ');//切中文日期
 
                 Be_temp = temp[2].Split(':');
                 Be_temp_hour.Add(Be_temp[0]);
@@ -139,7 +139,7 @@
                 Total_min.Add(total_time);
 
 
-                //從資料庫資料來Dictionary更新欄位
+                //從資料庫的資料來Dictionary更新欄位
                 for (int j = 0; j < Be_temp_hour.Count; j++)//讀取List裡面的時間
                 {
                     int begin_hour = Convert.ToInt32(Be_temp_hour[j]);//Be_temp[0]
@@ -201,11 +201,9 @@
 
                 }
             }
-            //Context.Response.Write(js.Serialize(list.ToJson()));
-            //Context.Response.Write(js.Serialize(TimeStatus.ToJson() + Chech_schedule_TorF(TimeStatus, split_Begin_time[2], End_time, Schedule_time.OrderBy(x => x).ToList()).ToJson()));
+          
             Context.Response.Write(js.Serialize(Chech_schedule_TorF(TimeStatus, split_Begin_time[2], End_time, Schedule_time.OrderBy(x => x).ToList(), Vail_list))); //標準輸出
-            //Context.Response.Write(js.Serialize(split_Begin_time[2].ToJson()));
-            //Context.Response.Write(js.Serialize(TimeStatus.ToJson() + "," + split_Begin_time[2].ToJson() + "," + End_time.ToJson()));
+           
         }
 
         private List<Feed_Back> Chech_schedule_TorF(Dictionary<string, bool> TorF_Dictionary, string begin_time, string end_time, List<string> Schedule_time, List<Vaild_increment> List_Vaild)

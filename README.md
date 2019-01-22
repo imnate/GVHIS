@@ -18,3 +18,26 @@
 <p align="center">
 <img src ="img/新增每日工作預定表.jpg" width = 400>
 </p>
+
+## 行程表管理模式
+<p align="center">
+<img src ="img/行程管理模式.jpg" width = 400>
+</p>
+
+## 水電設備報修
+<p align="center">
+<img src ="img/報修.jpg" width = 400>
+</p>
+
+## 水電設備報修管理模式
+<p align="center">
+<img src ="img/水電報修.jpg" width = 400>
+</p>
+
+## 水電設備報修查詢
+<p align="center">
+<img src ="img/報修查詢.jpg" width = 400>
+</p>
+
+
+
